@@ -8,6 +8,7 @@ import sistema.presentacion.clientes.Mapa;
 import java.util.Observable;
 import javax.swing.DefaultComboBoxModel;
 import java.io.IOException;
+import sistema.logic.Cliente;
 import sistema.logic.Prestamo;
 /**
  *
@@ -39,9 +40,10 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     @Override
     public void update(Observable o, Object arg) {
        Mapa Map = new Mapa();
-       String cedImpor = Map.CedMap();
+       //String cedImpor = Map.CedMap();
        Prestamo prestamo = model.getPrestamo();
-       cedText.setText(cedImpor);
+      // cedText.setText(cedImpor);
+      cedText.setText(prestamo.getCliente().getCedula());
        diaText.setText(prestamo.getDia());
        mesText.setText(prestamo.getMes());
        annioText.setText(prestamo.getAnnio());
@@ -230,7 +232,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         // TODO add your handling code here:
        double d=Double.parseDouble(montoText.getText()); 
        double p=Double.parseDouble(plazoText.getText());
-        controller.prestamoAdd(new Prestamo (d,2,p,diaText.getText(),mesText.getText(),annioText.getText()) );
+        controller.prestamoAdd(new Prestamo (d,2,p,diaText.getText(),mesText.getText(),annioText.getText()));
     }//GEN-LAST:event_agregarBotonActionPerformed
 
     private void cedTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cedTextActionPerformed
