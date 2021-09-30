@@ -47,7 +47,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
        annioText.setText(prestamo.getAnnio());
        montoText.setText(String.valueOf(prestamo.getMonto()));
        plazoText.setText(String.valueOf(prestamo.getPlazo()));
-      prestamoTable.setModel(new MensualidadTableModel(model.getPrestamo().getMensualidades()));
+       prestamoTable.setModel(new MensualidadTableModel(model.getPrestamos()));
     }
     //************** END MVC ***********
     public View() {

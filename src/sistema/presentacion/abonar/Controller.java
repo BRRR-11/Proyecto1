@@ -74,4 +74,14 @@ public class Controller {
         }
         
     }
+        public void verificar(String abono, int numero )
+    {
+        try{
+           Prestamo prestamo = Service.instance().verificarCuota(abono, numero);
+           double ab=Double.parseDouble(abono);
+            model.setPrestamo(new Prestamo(ab,2,0,"","",""));
+            model.setPrestamos(Arrays.asList(prestamo));
+        }catch(Exception ex){
+        }
+    }
 }

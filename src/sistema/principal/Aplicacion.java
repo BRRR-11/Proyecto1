@@ -44,8 +44,7 @@ public class Aplicacion {
         sistema.presentacion.prestamoCliente.Controller controllerPrestamoCliente = new sistema.presentacion.prestamoCliente.Controller(modelPrestamoCliente,viewPrestamoCliente);
         PRESTAMOCLIENTE = controllerPrestamoCliente;
         
-        System.out.println("Hola mundo");
-        System.out.println("adios mundo");
+       
         
         CLIENTES.show();
         

@@ -15,17 +15,19 @@ import sistema.logic.Provincia;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Data {
    private List<Cliente> clientes;
+   private List<Prestamo> prestamos;
    private List<Provincia> provincias;
    private List<Canton> cantones;
    private List<Distrito> distritos;
-   private List<Prestamo> prestamos;
+  
    
    public Data(){
        clientes = new ArrayList();
+       prestamos = new ArrayList();
        provincias = new ArrayList();
        cantones = new ArrayList();
        distritos = new ArrayList();
-       prestamos = new ArrayList();
+       
    }
    public List<Cliente> getClientes() {
         return clientes;

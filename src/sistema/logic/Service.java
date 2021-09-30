@@ -95,6 +95,25 @@ public class Service {
         else throw new Exception("Factura ya existe");           
         
     } 
+    
+    public Prestamo verificarCuota(String abono, int numero)throws Exception
+    {
+        Prestamo old=data.getPrestamos().stream().filter(f->f.getNumero()==(numero)).findFirst().orElse(null);
+        double ab=Double.parseDouble(abono);
+        if (old!=null)
+        {
+          if(ab>=old.getCuota())
+          {
+              old.setMonto(ab);
+              XmlPersister.instance().store(data);
+              return old;
+              
+          }
+           return old;
+        }
+          else throw new Exception("Pelicula no existe");
+    }
+    
      //------------------------------------------------------------------------------------------------------------------------
      public void store(){
         try {
