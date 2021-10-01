@@ -12,11 +12,10 @@ public class Cliente {
     @XmlID
     String cedula;
     String nombre;
-    @XmlIDREF
     String provincia;
-    @XmlIDREF
+
     String canton;
-    @XmlIDREF
+  
     String distrito;
     
     public Cliente(){

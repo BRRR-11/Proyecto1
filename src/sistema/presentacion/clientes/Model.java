@@ -1,5 +1,7 @@
 package sistema.presentacion.clientes;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import sistema.logic.Provincia;
 import sistema.logic.Cliente;
@@ -7,6 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 import sistema.logic.Canton;
 import sistema.logic.Distrito;
+import sistema.logic.Service;
 
 public class Model extends Observable{
      // Model attributes here
@@ -16,11 +19,28 @@ public class Model extends Observable{
     Provincia provincia;
     Canton canton;
     Distrito distrito;
-    List<Cliente> clientes;
+    //List<Cliente> clientes;
     List<Provincia> provincias;
     List<Canton> cantones;
     List<Distrito> distritos;
 
+    public Model() {
+        
+        cliente = new Cliente();
+        provincia = new Provincia();
+        canton = new Canton();
+        distrito = new Distrito();
+       // clientes = new ArrayList();
+        provincias = new ArrayList();
+        cantones  = new ArrayList();
+        distritos = new ArrayList();
+ 
+    }
+
+    
+    
+    
+    
     public Cliente getCliente() {
         return cliente;
     }
@@ -29,14 +49,14 @@ public class Model extends Observable{
         this.cliente = cliente;
     }
 
-    public List<Cliente> getClientes() {
+   /* public List<Cliente> getClientes() {
         return clientes;
     }
 
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-
+*/
     public Provincia getProvincia() {
         return provincia;
     }
@@ -94,5 +114,35 @@ public class Model extends Observable{
     public void commit(){
         this.setChanged();
         this.notifyObservers();
+    }
+
+    void crearCliente(Cliente cli) throws Exception {
+        Service.instance().creandoCliente(cli);
+        this.commit();
+        
+    }
+    
+    
+      public void buscar(String provincia) throws Exception 
+    {
+        List<Canton> cantones = Service.instance().buscarCanton(provincia);
+        this.setCantones(cantones);
+        this.setDistritos(cantones.get(0).getDistrito());
+        this.commit();
+       
+    }
+    public void consultar(String cedula) throws Exception{
+
+        Cliente cliente = Service.instance().clienteGet(cedula);
+        this.setCliente(cliente);
+        this.provincia = Service.instance().buscarProvinciaNombre(cliente.getProvincia());
+        this.canton = provincia.getCanton().stream().filter(f->f.getNumero().equals(cliente.getCanton())).findFirst().orElse(null);
+        this.distrito = canton.getDistrito().stream().filter(f->f.getNumero().equals(cliente.getDistrito())).findFirst().orElse(null);
+        this.commit();
+       
+    }
+
+    void guardarDatos() {
+        Service.instance().store();
     }
 }

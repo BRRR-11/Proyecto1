@@ -16,15 +16,7 @@ public class Controller {
     public Controller(Model model, Mapa view) {
         this.model = model;
         this.view = view;
-       
-        model.setCliente(new Cliente());
-        model.setClientes(new ArrayList<>());
-        model.setProvincia(new Provincia());
-        //model.setProvincias(new ArrayList<>());
-        model.setProvincias(Service.instance().getProvincias());
-       // model.setCantones(new ArrayList<>());
-        model.setCantones(Service.instance().getCanton());
-        model.setDistritos(Service.instance().getDistrito());
+     
         view.setModel(model);
         view.setController(this);
     }
@@ -39,12 +31,36 @@ public class Controller {
       Aplicacion.PRESTAMOCLIENTE.show();
     }
     
-    public void buscar(String dato) 
+    /*
+    public void buscar(String provincia) 
     {
         try{
-            List<Canton> cantones = Service.instance().buscarCanton(dato);
-            model.setCantones(cantones);
+            model.buscar(provincia);
+        }
+        catch (Exception ex) 
+        {
+            model.setCantones(new ArrayList<>());
             model.commit();
+        }
+    }*/
+    public void consultar(String cedula){
+         try {
+             model.consultar(cedula);
+            
+         } catch (Exception ex) {
+            model.setCliente(new Cliente());
+            model.commit();
+         }
+    }
+  
+
+    private void hide() {
+        this.view.setVisible(false);
+    }
+
+    void cargarCantones(String provincia) {
+       try{
+            model.buscar(provincia);
         }
         catch (Exception ex) 
         {
@@ -52,32 +68,25 @@ public class Controller {
             model.commit();
         }
     }
-    public void consultar(String cedula){
-         try {
-             Cliente cliente = Service.instance().clienteGet(cedula);
-             model.setCliente(cliente);
-             model.commit();
-         } catch (Exception ex) {
-            model.setCliente(new Cliente());
-            model.commit();
-         }
-    }
-    public void guardar(Cliente cli){
-        try{
-         Service.instance().creandoCliente(cli);
-         model.setCliente(cli);
-         model.setClientes(Arrays.asList(cli));
-         model.commit(); 
-         
+
+    void guardar(String id, String nombre, String provincia, String canton, String distrito ) {
+       try{
+           Cliente cli = new Cliente(id, nombre, provincia, canton, distrito);
+          model.crearCliente(cli);      
         }
         catch (Exception exi){
-           // model.setCliente(new Cliente());
-            //model.commit();
+           model.setCliente(new Cliente());       
+        }
+    }
+    
+    public void cargarDistritos(Canton canton){
+        if(canton != null){
+            model.setDistritos(canton.getDistrito());
+            model.commit();
         }
     }
 
-    private void hide() {
-        this.view.setVisible(false);
+    void guardarDatos() {
+        model.guardarDatos();
     }
-    
 }

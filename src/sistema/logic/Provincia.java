@@ -13,7 +13,6 @@ public class Provincia {
     @XmlID
     String numero;
     String nombre;
-    @XmlIDREF
     List<Canton> cantones;
 
     public Provincia(String numero, String nombre, List<Canton> cantones) {

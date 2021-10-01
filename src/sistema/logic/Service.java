@@ -30,12 +30,7 @@ public class Service {
     public List<Cliente> getCliente(){
         return data.getClientes();
     }
-    public List<Canton> getCanton(){
-        return data.getCantones();
-    }
-    public List<Distrito> getDistrito(){
-        return data.getDistritos();
-    }
+    
     
     public Cliente clienteGet(String cedula) throws Exception{
         Cliente result=data.getClientes().stream().filter(c->c.getCedula().equals(cedula)).findFirst().orElse(null);
@@ -129,6 +124,13 @@ public class Service {
             data =  new Data();
         }
     }
-   
+
+    public Provincia buscarProvinciaNombre(String nombre) throws Exception {
+        Provincia result=data.getProvincias().stream().filter(f->f.getNombre().equals(nombre)).findFirst().orElse(null);
+        if (result!=null) return result;
+        else throw new Exception("Provincia no existe");   
+    }
+
+    
     
 }

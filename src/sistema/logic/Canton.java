@@ -13,7 +13,6 @@ public class Canton {
     @XmlID
     String numero;
     String nombre;
-    @XmlIDREF
     List<Distrito> distritos;
 
     public Canton(String numero, String nombre, List<Distrito> distritos) {
@@ -71,26 +70,7 @@ public class Canton {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Canton other = (Canton) obj;
-        if (!Objects.equals(this.numero, other.numero)) {
-            return false;
-        }
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.distritos, other.distritos)) {
-            return false;
-        }
-        return true;
+       return this.numero.equals(((Canton)obj).numero);
     }
 
 

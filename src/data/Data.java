@@ -17,16 +17,14 @@ public class Data {
    private List<Cliente> clientes;
    private List<Prestamo> prestamos;
    private List<Provincia> provincias;
-   private List<Canton> cantones;
-   private List<Distrito> distritos;
+ 
   
    
    public Data(){
        clientes = new ArrayList();
        prestamos = new ArrayList();
        provincias = new ArrayList();
-       cantones = new ArrayList();
-       distritos = new ArrayList();
+      
        
    }
    public List<Cliente> getClientes() {
@@ -45,22 +43,7 @@ public class Data {
         this.provincias = provincias;
     }
 
-    public List<Canton> getCantones() {
-        return cantones;
-    }
-
-    public void setCantones(List<Canton> cantones) {
-        this.cantones = cantones;
-    }
-
-    public List<Distrito> getDistritos() {
-        return distritos;
-    }
-
-    public void setDistritos(List<Distrito> distritos) {
-        this.distritos = distritos;
-    }
-    
+ 
     public List<Prestamo> getPrestamos() {
         return prestamos;
     }

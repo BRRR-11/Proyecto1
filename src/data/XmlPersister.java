@@ -15,7 +15,7 @@ public class XmlPersister {
     private static XmlPersister theInstance;
     public static XmlPersister instance(){
         if (theInstance==null){ 
-            theInstance=new XmlPersister("prestamos.xml");
+            theInstance=new XmlPersister("Provincias.xml");
         }
         return theInstance;
     }

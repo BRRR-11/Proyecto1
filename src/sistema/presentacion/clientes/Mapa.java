@@ -1,9 +1,20 @@
 package sistema.presentacion.clientes;
 
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import sistema.logic.Cliente;
 import java.util.Observable;
 import javax.swing.DefaultComboBoxModel;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import sistema.logic.Canton;
+import sistema.logic.Distrito;
 import sistema.logic.Provincia;
 
 /**
@@ -34,16 +45,12 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
     
     @Override
     public void update(Observable o, Object arg) {
-        Cliente cliente = model.getCliente();
-        cedula.setText(cliente.getCedula());
-        nombre.setText(cliente.getNombre());
-        provincias.setText(model.getProvincia().getNombre());
-        canton.setModel(new DefaultComboBoxModel(model.getProvincia().getCanton().toArray()));
-        canton.setSelectedItem(model.getCanton());
-        distrito.setModel(new DefaultComboBoxModel(model.getCanton().getDistrito().toArray()));
-        distrito.setSelectedItem(model.getDistrito());
         
-        mapaProvincias();
+        canton.setModel(new DefaultComboBoxModel(model.getCantones().toArray()));
+        //canton.setSelectedItem(model.getCanton());
+        distrito.setModel(new DefaultComboBoxModel(model.getDistritos().toArray()));
+       // distrito.setSelectedItem(model.getDistrito());
+        
     }
     //************** END MVC ***********
     
@@ -52,6 +59,123 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
      */
     public Mapa() {
         initComponents();
+        int a = 100;
+        button6=new JButton();
+        button5=new JButton();
+        button4=new JButton();
+        button3=new JButton();
+        button2=new JButton();
+        button1=new JButton();
+        button=new JButton();
+        
+        iniciarBotonProvincia(button6, 282, 523-a, 142, 120, "/Imagenes/s1.png", "/Imagenes/San jose.png", "San José");
+        iniciarBotonProvincia(button5, 336, 526-a, 100, 75, "/Imagenes/c1.png", "/Imagenes/Cartago.png", "Cartago");
+        iniciarBotonProvincia(button4, 316, 453-a, 70, 110, "/Imagenes/h1.png", "/Imagenes/Heredia.png", "Heredia");
+        iniciarBotonProvincia(button3, 100, 403-a, 170, 175, "/Imagenes/g1.png", "/Imagenes/Guanacaste.png", "Guanacaste");
+        iniciarBotonProvincia(button2, 357, 438-a, 160, 215, "/Imagenes/l1.png", "/Imagenes/Limon.png", "Limón");
+        iniciarBotonProvincia(button1, 178, 508-a, 330, 235, "/Imagenes/p1.png", "/Imagenes/Puntarenas.png", "Puntarenas");
+        iniciarBotonProvincia(button, 179, 418-a, 160, 150, "/Imagenes/a1.png", "/Imagenes/Alajuela.png", "Alajuela");
+
+        try {
+            p1 = new Pic(ImageIO.read(getClass().getResource("/Imagenes/mapa.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setPreferredSize(new Dimension(1100, 800));
+        add(button4);
+        add(button5);
+        add(button6);
+        add(button);
+        add(button2);
+        add(button3);
+        add(button1);
+        p1.setBounds(30,400-a,700,600);
+      //  pics.setVisible(true);
+        add(p1);
+    }
+    
+    
+    public void iniciarBotonProvincia(final JButton boton, int izq, int abajo, int ancho, int alto, String imaNoSelec, String imaSelec, String nombreProvi){
+        
+          try {
+            //inicializar btones desde afuera
+            boton.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(imaNoSelec))));
+            boton.setBorderPainted(false);
+            boton.setFocusPainted(false);
+            boton.setContentAreaFilled(false);
+            boton.setBounds(izq,abajo,ancho,alto);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        boton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                System.out.println("entro!");
+                try {
+                    boton.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(imaSelec))));
+                    boton.repaint();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                
+                if(!provincias.getText().equals(nombreProvi)){
+                     System.out.println("salio!");
+                try {
+                   
+                    boton.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(imaNoSelec))));
+                    boton.repaint();
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+                
+               
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    clearMap();
+                    provincias.setText(nombreProvi); 
+                    boton.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(imaSelec))));
+                    boton.repaint();
+                    controller.cargarCantones(nombreProvi);
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(Mapa.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
+    }
+    
+    private void clearMap(){
+        try {
+            button6.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/Imagenes/s1.png"))));
+            button6.repaint();
+            button5.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/Imagenes/c1.png"))));
+            button5.repaint();
+            button4.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/Imagenes/h1.png"))));
+            button4.repaint();
+            button3.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/Imagenes/g1.png"))));
+            button3.repaint();
+            button2.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/Imagenes/l1.png"))));
+            button2.repaint();
+            button1.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/Imagenes/p1.png"))));
+            button1.repaint();
+            button.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/Imagenes/a1.png"))));
+            button.repaint();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Mapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
     }
 
     /**
@@ -63,668 +187,49 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        alajuelaLabel = new javax.swing.JLabel();
-        alajuelaLabel2 = new javax.swing.JLabel();
-        alajuelaLabel3 = new javax.swing.JLabel();
-        alajuelaLabel4 = new javax.swing.JLabel();
-        alajuelaLabel5 = new javax.swing.JLabel();
-        alajuelaLabel6 = new javax.swing.JLabel();
-        alajuelaLabel7 = new javax.swing.JLabel();
-        guanacasteLabel = new javax.swing.JLabel();
-        guanacasteLabel1 = new javax.swing.JLabel();
-        guanacasteLabel2 = new javax.swing.JLabel();
-        guanacasteLabel3 = new javax.swing.JLabel();
-        guanacasteLabel4 = new javax.swing.JLabel();
-        guanacasteLabel5 = new javax.swing.JLabel();
-        guanacasteLabel6 = new javax.swing.JLabel();
-        guanacasteLabel7 = new javax.swing.JLabel();
-        herediaLabel = new javax.swing.JLabel();
-        herediaLabel1 = new javax.swing.JLabel();
-        herediaLabel2 = new javax.swing.JLabel();
-        herediaLabel3 = new javax.swing.JLabel();
-        cartagoLabel = new javax.swing.JLabel();
-        cartagoLabel1 = new javax.swing.JLabel();
-        cartagoLabel2 = new javax.swing.JLabel();
-        limonLabel = new javax.swing.JLabel();
-        limonLabel1 = new javax.swing.JLabel();
-        limonLabel2 = new javax.swing.JLabel();
-        limonLabel3 = new javax.swing.JLabel();
-        limonLabel4 = new javax.swing.JLabel();
-        limonLabel5 = new javax.swing.JLabel();
-        limonLabel7 = new javax.swing.JLabel();
-        limonLabel8 = new javax.swing.JLabel();
-        sanJoseLabel = new javax.swing.JLabel();
-        sanJoseLabel1 = new javax.swing.JLabel();
-        sanJoseLabel2 = new javax.swing.JLabel();
-        sanJoseLabel3 = new javax.swing.JLabel();
-        sanJoseLabel4 = new javax.swing.JLabel();
-        sanJoseLabel5 = new javax.swing.JLabel();
-        puntarenasLabel = new javax.swing.JLabel();
-        puntarenasLabel1 = new javax.swing.JLabel();
-        puntarenasLabel2 = new javax.swing.JLabel();
-        puntarenasLabel3 = new javax.swing.JLabel();
-        puntarenasLabel4 = new javax.swing.JLabel();
-        puntarenasLabel5 = new javax.swing.JLabel();
-        puntarenasLabel6 = new javax.swing.JLabel();
-        puntarenasLabel7 = new javax.swing.JLabel();
-        puntarenasLabel8 = new javax.swing.JLabel();
-        puntarenasLabel9 = new javax.swing.JLabel();
-        puntarenasLabel10 = new javax.swing.JLabel();
-        puntarenasLabel11 = new javax.swing.JLabel();
-        puntarenasLabel12 = new javax.swing.JLabel();
-        puntarenasLabel13 = new javax.swing.JLabel();
-        puntarenasLabel14 = new javax.swing.JLabel();
-        puntarenasLabel15 = new javax.swing.JLabel();
         cedLabel = new javax.swing.JLabel();
-        nomLabel = new javax.swing.JLabel();
         cedula = new javax.swing.JTextField();
+        consultar = new javax.swing.JButton();
+        nomLabel = new javax.swing.JLabel();
         nombre = new javax.swing.JTextField();
         provinciaLabel = new javax.swing.JLabel();
-        cantonLabel = new javax.swing.JLabel();
-        distritoLabel = new javax.swing.JLabel();
         provincias = new javax.swing.JTextField();
+        cantonLabel = new javax.swing.JLabel();
         canton = new javax.swing.JComboBox<>();
+        distritoLabel = new javax.swing.JLabel();
         distrito = new javax.swing.JComboBox<>();
-        consultar = new javax.swing.JButton();
         guardar = new javax.swing.JButton();
-        fondoLabel = new javax.swing.JLabel();
         prestamoBoton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Clientes");
-
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        alajuelaLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        alajuelaLabel.setText("ALAJUELA");
-        alajuelaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                alajuelaLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                alajuelaLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                alajuelaLabelMouseExited(evt);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
-        jPanel1.add(alajuelaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 80, 80));
-
-        alajuelaLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                alajuelaLabel2MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                alajuelaLabel2MouseExited(evt);
-            }
-        });
-        jPanel1.add(alajuelaLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 100, 20));
-
-        alajuelaLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                alajuelaLabel3MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                alajuelaLabel3MouseExited(evt);
-            }
-        });
-        jPanel1.add(alajuelaLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 210, 70, 30));
-
-        alajuelaLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                alajuelaLabel4MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                alajuelaLabel4MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                alajuelaLabel4MouseExited(evt);
-            }
-        });
-        jPanel1.add(alajuelaLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, 70, 30));
-
-        alajuelaLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                alajuelaLabel5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                alajuelaLabel5MouseExited(evt);
-            }
-        });
-        jPanel1.add(alajuelaLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 40, 40));
-
-        alajuelaLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                alajuelaLabel6MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                alajuelaLabel6MouseExited(evt);
-            }
-        });
-        jPanel1.add(alajuelaLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 40, 30));
-
-        alajuelaLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                alajuelaLabel7MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                alajuelaLabel7MouseExited(evt);
-            }
-        });
-        jPanel1.add(alajuelaLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, 10, 20));
-
-        guanacasteLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        guanacasteLabel.setText("GUANACASTE");
-        guanacasteLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        guanacasteLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                guanacasteLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabelMouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, 90, 60));
-
-        guanacasteLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabel1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabel1MouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 30, 80));
-
-        guanacasteLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabel2MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabel2MouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, 80, 20));
-
-        guanacasteLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabel3MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabel3MouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 30, 20));
-
-        guanacasteLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabel4MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabel4MouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 30, 10));
-
-        guanacasteLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabel5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabel5MouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, 80, 60));
-
-        guanacasteLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabel6MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabel6MouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 40, 50));
-
-        guanacasteLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                guanacasteLabel7MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                guanacasteLabel7MouseExited(evt);
-            }
-        });
-        jPanel1.add(guanacasteLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 60, 40));
-
-        herediaLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        herediaLabel.setText("HEREDIA");
-        herediaLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                herediaLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                herediaLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                herediaLabelMouseExited(evt);
-            }
-        });
-        jPanel1.add(herediaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(277, 240, -1, 60));
-
-        herediaLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                herediaLabel1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                herediaLabel1MouseExited(evt);
-            }
-        });
-        jPanel1.add(herediaLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 290, 40, 20));
-
-        herediaLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                herediaLabel2MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                herediaLabel2MouseExited(evt);
-            }
-        });
-        jPanel1.add(herediaLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 20, 40));
-
-        herediaLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                herediaLabel3MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                herediaLabel3MouseExited(evt);
-            }
-        });
-        jPanel1.add(herediaLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, 30, 10));
-
-        cartagoLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cartagoLabel.setText("  CARTAGO");
-        cartagoLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cartagoLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                cartagoLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                cartagoLabelMouseExited(evt);
-            }
-        });
-        jPanel1.add(cartagoLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 340, 80, 40));
-
-        cartagoLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                cartagoLabel1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                cartagoLabel1MouseExited(evt);
-            }
-        });
-        jPanel1.add(cartagoLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, 20, 40));
-
-        cartagoLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                cartagoLabel2MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                cartagoLabel2MouseExited(evt);
-            }
-        });
-        jPanel1.add(cartagoLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 370, 40, 30));
-
-        limonLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        limonLabel.setText("LIMON");
-        limonLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                limonLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabelMouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 350, 60, 70));
-
-        limonLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                limonLabel1MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabel1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabel1MouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(321, 260, 40, 70));
-
-        limonLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabel2MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabel2MouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 20, 50));
-
-        limonLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabel3MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabel3MouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 300, 20, 40));
-
-        limonLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabel4MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabel4MouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, 30, 40));
-
-        limonLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabel5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabel5MouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 380, 40, 20));
-
-        limonLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabel7MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabel7MouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 390, 30, 30));
-
-        limonLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                limonLabel8MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                limonLabel8MouseExited(evt);
-            }
-        });
-        jPanel1.add(limonLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 420, 20, 30));
-
-        sanJoseLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        sanJoseLabel.setText("SAN JOSE");
-        sanJoseLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                sanJoseLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                sanJoseLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                sanJoseLabelMouseExited(evt);
-            }
-        });
-        jPanel1.add(sanJoseLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 400, 50, 20));
-
-        sanJoseLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                sanJoseLabel1MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                sanJoseLabel1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                sanJoseLabel1MouseExited(evt);
-            }
-        });
-        jPanel1.add(sanJoseLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 60, 40));
-
-        sanJoseLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                sanJoseLabel2MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                sanJoseLabel2MouseExited(evt);
-            }
-        });
-        jPanel1.add(sanJoseLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 370, 30, 30));
-
-        sanJoseLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                sanJoseLabel3MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                sanJoseLabel3MouseExited(evt);
-            }
-        });
-        jPanel1.add(sanJoseLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 390, 40, 30));
-
-        sanJoseLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                sanJoseLabel4MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                sanJoseLabel4MouseExited(evt);
-            }
-        });
-        jPanel1.add(sanJoseLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 410, 50, 30));
-
-        sanJoseLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                sanJoseLabel5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                sanJoseLabel5MouseExited(evt);
-            }
-        });
-        jPanel1.add(sanJoseLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 420, 20, 30));
-
-        puntarenasLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        puntarenasLabel.setText("  PUNTARENAS");
-        puntarenasLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                puntarenasLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabelMouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 460, 90, 60));
-
-        puntarenasLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel1MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 350, 40, 30));
-
-        puntarenasLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel2MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel2MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 20, 10));
-
-        puntarenasLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel3MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel3MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 10, 10));
-
-        puntarenasLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel4MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel4MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, 20, 50));
-
-        puntarenasLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel5MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel5MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 320, 20, 20));
-
-        puntarenasLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel6MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel6MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, 10, 40));
-
-        puntarenasLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel7MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel7MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 390, 30, 20));
-
-        puntarenasLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel8MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel8MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, 20, 10));
-
-        puntarenasLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel9MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel9MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 420, 10, 10));
-
-        puntarenasLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel10MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel10MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 440, 20, 10));
-
-        puntarenasLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel11MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel11MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 450, 90, 10));
-
-        puntarenasLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel12MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel12MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 430, 60, 30));
-
-        puntarenasLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel13MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel13MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 520, 50, 20));
-
-        puntarenasLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel14MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel14MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 510, 30, 40));
-
-        puntarenasLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                puntarenasLabel15MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                puntarenasLabel15MouseExited(evt);
-            }
-        });
-        jPanel1.add(puntarenasLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 470, 40, 20));
 
         cedLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         cedLabel.setText("Cedula");
-        jPanel1.add(cedLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 60, -1));
+
+        consultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Lupa.jpg"))); // NOI18N
+        consultar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        consultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultarActionPerformed(evt);
+            }
+        });
 
         nomLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         nomLabel.setText("Nombre");
-        jPanel1.add(nomLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 70, -1));
-        jPanel1.add(cedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 160, -1));
-        jPanel1.add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 350, -1));
 
         provinciaLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         provinciaLabel.setText("Provincias");
-        jPanel1.add(provinciaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
+
+        provincias.setToolTipText("");
 
         cantonLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         cantonLabel.setText("Canton");
-        jPanel1.add(cantonLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, -1, -1));
-
-        distritoLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        distritoLabel.setText("Distrito");
-        jPanel1.add(distritoLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 80, -1, -1));
-
-        provincias.setToolTipText("");
-        jPanel1.add(provincias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 130, -1));
 
         canton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -736,35 +241,22 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
                 cantonActionPerformed(evt);
             }
         });
-        jPanel1.add(canton, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 150, -1));
+
+        distritoLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        distritoLabel.setText("Distrito");
 
         distrito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 distritoActionPerformed(evt);
             }
         });
-        jPanel1.add(distrito, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 170, -1));
 
-        consultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Lupa.jpg"))); // NOI18N
-        consultar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        consultar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consultarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(consultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, 40, 30));
-
-        guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guardar.jpg"))); // NOI18N
+        guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Guardar.jpg"))); // NOI18N
         guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 guardarActionPerformed(evt);
             }
         });
-        jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 40, 30));
-
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg"))); // NOI18N
-        fondoLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(fondoLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 450, 460));
 
         prestamoBoton.setText("Prestamos");
         prestamoBoton.addActionListener(new java.awt.event.ActionListener() {
@@ -772,520 +264,126 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
                 prestamoBotonActionPerformed(evt);
             }
         });
-        jPanel1.add(prestamoBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 270, 150, 180));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(provinciaLabel)
+                            .addComponent(nomLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(43, 43, 43)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cedula, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(50, 50, 50)
+                                        .addComponent(consultar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(90, 90, 90)
+                                .addComponent(cantonLabel)
+                                .addGap(120, 120, 120)
+                                .addComponent(distritoLabel)
+                                .addGap(110, 110, 110)
+                                .addComponent(guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(provincias, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(canton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(distrito, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(277, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 802, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(prestamoBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cedLabel)
+                        .addComponent(cedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(consultar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nomLabel)
+                    .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(provinciaLabel)
+                        .addComponent(cantonLabel)
+                        .addComponent(distritoLabel))
+                    .addComponent(guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(provincias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(canton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(distrito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(115, 115, 115)
+                .addComponent(prestamoBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(244, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-   public String CedMap()
-   {
-      return cedula.getText();
-   }
-    
-    
-    private void alajuelaLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabelMouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-    }//GEN-LAST:event_alajuelaLabelMouseEntered
-
-    private void alajuelaLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabelMouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_alajuelaLabelMouseExited
-
-    private void alajuelaLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel2MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel2MouseEntered
-
-    private void alajuelaLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel2MouseExited
-       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel2MouseExited
-
-    private void alajuelaLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel3MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel3MouseEntered
-
-    private void alajuelaLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel3MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel3MouseExited
-
-    private void alajuelaLabel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel4MouseEntered
-       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel4MouseEntered
-
-    private void alajuelaLabel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel4MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel4MouseExited
-
-    private void alajuelaLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel5MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel5MouseEntered
-
-    private void alajuelaLabel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel5MouseExited
-         fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel5MouseExited
-
-    private void alajuelaLabel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel6MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel6MouseEntered
-
-    private void alajuelaLabel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel6MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel6MouseExited
-
-    private void alajuelaLabel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel7MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel7MouseEntered
-
-    private void alajuelaLabel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel7MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_alajuelaLabel7MouseExited
-
-    private void guanacasteLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel1MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel1MouseEntered
-
-    private void guanacasteLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel1MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel1MouseExited
-
-    private void guanacasteLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel2MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel2MouseEntered
-
-    private void guanacasteLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel2MouseExited
-       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel2MouseExited
-
-    private void guanacasteLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel3MouseEntered
-       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel3MouseEntered
-
-    private void guanacasteLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel3MouseExited
-       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel3MouseExited
-
-    private void guanacasteLabel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel4MouseEntered
-       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel4MouseEntered
-
-    private void guanacasteLabel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel4MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel4MouseExited
-
-    private void guanacasteLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel5MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel5MouseEntered
-
-    private void guanacasteLabel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel5MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel5MouseExited
-
-    private void guanacasteLabel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel6MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel6MouseEntered
-
-    private void guanacasteLabel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel6MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel6MouseExited
-
-    private void guanacasteLabel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel7MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel7MouseEntered
-
-    private void guanacasteLabel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabel7MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabel7MouseExited
-
-    private void herediaLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabelMouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Heredia.jpeg")));
-    }//GEN-LAST:event_herediaLabelMouseEntered
-
-    private void herediaLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabelMouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_herediaLabelMouseExited
-
-    private void herediaLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabel1MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Heredia.jpeg")));
-    }//GEN-LAST:event_herediaLabel1MouseEntered
-
-    private void herediaLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabel1MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_herediaLabel1MouseExited
-
-    private void herediaLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabel2MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Heredia.jpeg")));
-    }//GEN-LAST:event_herediaLabel2MouseEntered
-
-    private void herediaLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabel2MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_herediaLabel2MouseExited
-
-    private void herediaLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabel3MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Heredia.jpeg")));
-    }//GEN-LAST:event_herediaLabel3MouseEntered
-
-    private void herediaLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabel3MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_herediaLabel3MouseExited
-
-    private void cartagoLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartagoLabelMouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Cartago.jpeg")));
-    }//GEN-LAST:event_cartagoLabelMouseEntered
-
-    private void cartagoLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartagoLabelMouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_cartagoLabelMouseExited
-
-    private void cartagoLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartagoLabel1MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Cartago.jpeg")));
-    }//GEN-LAST:event_cartagoLabel1MouseEntered
-
-    private void cartagoLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartagoLabel1MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_cartagoLabel1MouseExited
-
-    private void cartagoLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartagoLabel2MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Cartago.jpeg")));
-    }//GEN-LAST:event_cartagoLabel2MouseEntered
-
-    private void cartagoLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartagoLabel2MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_cartagoLabel2MouseExited
-
-    private void limonLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabelMouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabelMouseEntered
-
-    private void limonLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabelMouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabelMouseExited
-
-    private void limonLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel1MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabel1MouseEntered
-
-    private void limonLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel1MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabel1MouseExited
-
-    private void limonLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel2MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabel2MouseEntered
-
-    private void limonLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel2MouseExited
-       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabel2MouseExited
-
-    private void limonLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel3MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabel3MouseEntered
-
-    private void limonLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel3MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabel3MouseExited
-
-    private void limonLabel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel4MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabel4MouseEntered
-
-    private void limonLabel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel4MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabel4MouseExited
-
-    private void limonLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel5MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabel5MouseEntered
-
-    private void limonLabel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel5MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabel5MouseExited
-
-    private void limonLabel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel7MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabel7MouseEntered
-
-    private void limonLabel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel7MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabel7MouseExited
-
-    private void limonLabel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel8MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-    }//GEN-LAST:event_limonLabel8MouseEntered
-
-    private void limonLabel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel8MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_limonLabel8MouseExited
-
-    private void sanJoseLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabelMouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
-    }//GEN-LAST:event_sanJoseLabelMouseEntered
-
-    private void sanJoseLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabelMouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_sanJoseLabelMouseExited
-
-    private void sanJoseLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel1MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel1MouseEntered
-
-    private void sanJoseLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel1MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel1MouseExited
-
-    private void sanJoseLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel2MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel2MouseEntered
-
-    private void sanJoseLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel2MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel2MouseExited
-
-    private void sanJoseLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel3MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel3MouseEntered
-
-    private void sanJoseLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel3MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel3MouseExited
-
-    private void sanJoseLabel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel4MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel4MouseEntered
-
-    private void sanJoseLabel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel4MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel4MouseExited
-
-    private void sanJoseLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel5MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel5MouseEntered
-
-    private void sanJoseLabel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel5MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_sanJoseLabel5MouseExited
-
-    private void puntarenasLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabelMouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabelMouseEntered
-
-    private void puntarenasLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabelMouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabelMouseExited
-
-    private void puntarenasLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel1MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel1MouseEntered
-
-    private void puntarenasLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel1MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel1MouseExited
-
-    private void puntarenasLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel2MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel2MouseEntered
-
-    private void puntarenasLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel2MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel2MouseExited
-
-    private void puntarenasLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel3MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel3MouseEntered
-
-    private void puntarenasLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel3MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel3MouseExited
-
-    private void puntarenasLabel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel4MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel4MouseEntered
-
-    private void puntarenasLabel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel4MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel4MouseExited
-
-    private void puntarenasLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel5MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel5MouseEntered
-
-    private void puntarenasLabel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel5MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel5MouseExited
-
-    private void puntarenasLabel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel6MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel6MouseEntered
-
-    private void puntarenasLabel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel6MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel6MouseExited
-
-    private void puntarenasLabel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel7MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel7MouseEntered
-
-    private void puntarenasLabel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel7MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel7MouseExited
-
-    private void puntarenasLabel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel8MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel8MouseEntered
-
-    private void puntarenasLabel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel8MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel8MouseExited
-
-    private void puntarenasLabel9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel9MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel9MouseEntered
-
-    private void puntarenasLabel9MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel9MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel9MouseExited
-
-    private void puntarenasLabel10MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel10MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel10MouseEntered
-
-    private void puntarenasLabel10MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel10MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel10MouseExited
-
-    private void puntarenasLabel11MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel11MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel11MouseEntered
-
-    private void puntarenasLabel11MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel11MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel11MouseExited
-
-    private void puntarenasLabel12MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel12MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel12MouseEntered
-
-    private void puntarenasLabel12MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel12MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel12MouseExited
-
-    private void puntarenasLabel13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel13MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel13MouseEntered
-
-    private void puntarenasLabel13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel13MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel13MouseExited
-
-    private void puntarenasLabel14MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel14MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel14MouseEntered
-
-    private void puntarenasLabel14MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel14MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel14MouseExited
-
-    private void puntarenasLabel15MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel15MouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel15MouseEntered
-
-    private void puntarenasLabel15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabel15MouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_puntarenasLabel15MouseExited
-
-    private void guanacasteLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabelMouseExited
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-    }//GEN-LAST:event_guanacasteLabelMouseExited
-
-    private void guanacasteLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabelMouseEntered
-        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-    }//GEN-LAST:event_guanacasteLabelMouseEntered
-
-    private void consultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarActionPerformed
-        controller.consultar(cedula.getText());
-    }//GEN-LAST:event_consultarActionPerformed
-
-    private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-        Cliente cliente = new Cliente(cedula.getText(), nombre.getText(), provincias.getText(), canton.getSelectedItem().toString(), distrito.getSelectedItem().toString());
-        controller.guardar(cliente);
-    }//GEN-LAST:event_guardarActionPerformed
-
-    private void guanacasteLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabelMouseClicked
-       provincias.setText("Guanacaste");
-       
-       
-       //canton.setModel(new DefaultComboBoxModel(model.getProvincia().getCanton().toArray()));
-    }//GEN-LAST:event_guanacasteLabelMouseClicked
-
-    private void alajuelaLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabelMouseClicked
-        provincias.setText("Alajuela");
-    }//GEN-LAST:event_alajuelaLabelMouseClicked
-
-    private void herediaLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herediaLabelMouseClicked
-        provincias.setText("Heredia");
-    }//GEN-LAST:event_herediaLabelMouseClicked
-
-    private void cartagoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartagoLabelMouseClicked
-        provincias.setText("Cartago");
-    }//GEN-LAST:event_cartagoLabelMouseClicked
-
-    private void limonLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabelMouseClicked
-        provincias.setText("Limón");
-    }//GEN-LAST:event_limonLabelMouseClicked
-
-    private void limonLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limonLabel1MouseClicked
-        provincias.setText("Limón");
-    }//GEN-LAST:event_limonLabel1MouseClicked
-
-    private void sanJoseLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabelMouseClicked
-        provincias.setText("San José");
-    }//GEN-LAST:event_sanJoseLabelMouseClicked
-
-    private void sanJoseLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sanJoseLabel1MouseClicked
-        provincias.setText("San José");
-    }//GEN-LAST:event_sanJoseLabel1MouseClicked
-
-    private void puntarenasLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_puntarenasLabelMouseClicked
-        provincias.setText("Puntarenas");
-    }//GEN-LAST:event_puntarenasLabelMouseClicked
-
-    private void alajuelaLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alajuelaLabel4MouseClicked
-        provincias.setText("Alajuela");
-    }//GEN-LAST:event_alajuelaLabel4MouseClicked
-
-    private void cantonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cantonMouseClicked
-        distrito.setModel(new DefaultComboBoxModel(model.getCanton().getDistrito().toArray()));
-        //canton.setSelectedItem(cliente.getCanton());
-    }//GEN-LAST:event_cantonMouseClicked
 
     private void prestamoBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prestamoBotonActionPerformed
         // TODO add your handling code here:
         controller.showPrestamoCliente();
     }//GEN-LAST:event_prestamoBotonActionPerformed
 
-    private void cantonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cantonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cantonActionPerformed
+    private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        Canton c = (Canton)canton.getSelectedItem();
+        Distrito d = (Distrito)distrito.getSelectedItem();
+        controller.guardar(cedula.getText(), nombre.getText(), provincias.getText(), c.getNumero(), d.getNumero());
+    }//GEN-LAST:event_guardarActionPerformed
+
+    private void consultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarActionPerformed
+        controller.consultar(cedula.getText());
+        Cliente cliente = model.getCliente();
+        cedula.setText(cliente.getCedula());
+        nombre.setText(cliente.getNombre());
+        provincias.setText(cliente.getProvincia());
+        controller.cargarCantones(cliente.getProvincia());
+        canton.setSelectedItem(model.getCanton());
+        distrito.setSelectedItem(model.getDistrito());
+        
+    }//GEN-LAST:event_consultarActionPerformed
 
     private void distritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_distritoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_distritoActionPerformed
 
+    private void cantonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cantonActionPerformed
+        Canton c = (Canton)canton.getSelectedItem();
+        controller.cargarDistritos(c);
+       canton.setSelectedItem(c);
+    }//GEN-LAST:event_cantonActionPerformed
+
+    //**********************************************************************************************************
+    private void cantonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cantonMouseClicked
+        /* distrito.setModel(new DefaultComboBoxModel(model.getCanton().getDistrito().toArray()));*/
+        //canton.setSelectedItem(cliente.getCanton());
+    }//GEN-LAST:event_cantonMouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        controller.guardarDatos();
+    }//GEN-LAST:event_formWindowClosing
+
+    
     /**
      * @param args the command line arguments
      */
@@ -1322,114 +420,22 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel alajuelaLabel;
-    private javax.swing.JLabel alajuelaLabel2;
-    private javax.swing.JLabel alajuelaLabel3;
-    private javax.swing.JLabel alajuelaLabel4;
-    private javax.swing.JLabel alajuelaLabel5;
-    private javax.swing.JLabel alajuelaLabel6;
-    private javax.swing.JLabel alajuelaLabel7;
-    private javax.swing.JComboBox<String> canton;
+    private javax.swing.JComboBox<Canton> canton;
     private javax.swing.JLabel cantonLabel;
-    private javax.swing.JLabel cartagoLabel;
-    private javax.swing.JLabel cartagoLabel1;
-    private javax.swing.JLabel cartagoLabel2;
     private javax.swing.JLabel cedLabel;
     private javax.swing.JTextField cedula;
     private javax.swing.JButton consultar;
-    private javax.swing.JComboBox<String> distrito;
+    private javax.swing.JComboBox<Distrito> distrito;
     private javax.swing.JLabel distritoLabel;
-    private javax.swing.JLabel fondoLabel;
-    private javax.swing.JLabel guanacasteLabel;
-    private javax.swing.JLabel guanacasteLabel1;
-    private javax.swing.JLabel guanacasteLabel2;
-    private javax.swing.JLabel guanacasteLabel3;
-    private javax.swing.JLabel guanacasteLabel4;
-    private javax.swing.JLabel guanacasteLabel5;
-    private javax.swing.JLabel guanacasteLabel6;
-    private javax.swing.JLabel guanacasteLabel7;
     private javax.swing.JButton guardar;
-    private javax.swing.JLabel herediaLabel;
-    private javax.swing.JLabel herediaLabel1;
-    private javax.swing.JLabel herediaLabel2;
-    private javax.swing.JLabel herediaLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel limonLabel;
-    private javax.swing.JLabel limonLabel1;
-    private javax.swing.JLabel limonLabel2;
-    private javax.swing.JLabel limonLabel3;
-    private javax.swing.JLabel limonLabel4;
-    private javax.swing.JLabel limonLabel5;
-    private javax.swing.JLabel limonLabel7;
-    private javax.swing.JLabel limonLabel8;
     private javax.swing.JLabel nomLabel;
     private javax.swing.JTextField nombre;
     private javax.swing.JButton prestamoBoton;
     private javax.swing.JLabel provinciaLabel;
     private javax.swing.JTextField provincias;
-    private javax.swing.JLabel puntarenasLabel;
-    private javax.swing.JLabel puntarenasLabel1;
-    private javax.swing.JLabel puntarenasLabel10;
-    private javax.swing.JLabel puntarenasLabel11;
-    private javax.swing.JLabel puntarenasLabel12;
-    private javax.swing.JLabel puntarenasLabel13;
-    private javax.swing.JLabel puntarenasLabel14;
-    private javax.swing.JLabel puntarenasLabel15;
-    private javax.swing.JLabel puntarenasLabel2;
-    private javax.swing.JLabel puntarenasLabel3;
-    private javax.swing.JLabel puntarenasLabel4;
-    private javax.swing.JLabel puntarenasLabel5;
-    private javax.swing.JLabel puntarenasLabel6;
-    private javax.swing.JLabel puntarenasLabel7;
-    private javax.swing.JLabel puntarenasLabel8;
-    private javax.swing.JLabel puntarenasLabel9;
-    private javax.swing.JLabel sanJoseLabel;
-    private javax.swing.JLabel sanJoseLabel1;
-    private javax.swing.JLabel sanJoseLabel2;
-    private javax.swing.JLabel sanJoseLabel3;
-    private javax.swing.JLabel sanJoseLabel4;
-    private javax.swing.JLabel sanJoseLabel5;
     // End of variables declaration//GEN-END:variables
 
-    public void mapaProvincias(){
-        if("Alajuela".equals(model.getProvincia().getNombre())){
-            fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
-        }
-        else{
-            if("Guanacaste".equals(model.getProvincia().getNombre())){
-                fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
-            }
-            else{
-                if("Heredia".equals(model.getProvincia().getNombre())){
-                   fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Heredia.jpeg")));
-                }
-                else{
-                    if("San José".equals(model.getProvincia().getNombre())){
-                        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
-                    }
-                    else{
-                         if("Cartago".equals(model.getProvincia().getNombre())){
-                             fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Cartago.jpeg")));
-                         }
-                         else{
-                              if("Puntarenas".equals(model.getProvincia().getNombre())){
-                                  fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
-                              }
-                              else{
-                                   if("Limón".equals(model.getProvincia().getNombre())){
-                                       fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
-                                   }
-                                   else{
-                                       if(model.getProvincia().getNombre().isEmpty()){
-                                           fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
-                                       }
-                                   }
-                              }
-                         }
-                    }
-                }
-            }
-            
-        }
-    }
+    private Pic p1;
+    private JButton button,button1,button2,button3,button4,button5,button6;
 }
+
