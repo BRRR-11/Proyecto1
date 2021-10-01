@@ -13,35 +13,34 @@ public class Cliente {
     String cedula;
     String nombre;
     @XmlIDREF
-    Provincia provincia;
+    String provincia;
     @XmlIDREF
-    Canton canton;
+    String canton;
     @XmlIDREF
-    Distrito distrito;
+    String distrito;
     
     public Cliente(){
         cedula = "";
         nombre = "";
-        provincia = new Provincia();
-        canton = new Canton();
-        distrito = new Distrito();
+        provincia = "";
+        canton = "";
+        distrito = "";
     }
-    
+   /* 
     public Cliente(String ced, String nom){
         cedula = ced;
         nombre = nom;
         provincia = new Provincia();
         canton = new Canton();
         distrito = new Distrito();
-    }
+    }*/
    public Cliente(String ced, String nom, String prov, String cant, String dis)
    {
         cedula = ced;
         nombre = nom;
-        provincia = new Provincia();
-       Object provincia=prov;
-       Object canton= cant;
-       Object distrito = dis;
+        provincia=prov;
+        canton= cant;
+        distrito = dis;
    }
 
     public String getNombre(){
@@ -50,7 +49,7 @@ public class Cliente {
     public String getCedula(){
         return cedula;
     }
-    public Provincia getProvincia(){
+    public String getProvincia(){
         return provincia;
     }
     
@@ -60,23 +59,23 @@ public class Cliente {
     public void setCedula(String ced){
         cedula = ced;
     }
-    public void setProvincia(Provincia prov){
+    public void setProvincia(String prov){
         provincia = prov;
     }
 
-    public Canton getCanton() {
+    public String getCanton() {
         return canton;
     }
 
-    public void setCanton(Canton canton) {
+    public void setCanton(String canton) {
         this.canton = canton;
     }
 
-    public Distrito getDistrito() {
+    public String getDistrito() {
         return distrito;
     }
 
-    public void setDistrito(Distrito distrito) {
+    public void setDistrito(String distrito) {
         this.distrito = distrito;
     }
 

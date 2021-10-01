@@ -37,13 +37,13 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
         Cliente cliente = model.getCliente();
         cedula.setText(cliente.getCedula());
         nombre.setText(cliente.getNombre());
-        provincias.setText(cliente.getProvincia().getNombre());
-        canton.setModel(new DefaultComboBoxModel(model.getCliente().getProvincia().getCanton().toArray()));
-        canton.setSelectedItem(cliente.getCanton());
-        distrito.setModel(new DefaultComboBoxModel(model.getCliente().getCanton().getDistrito().toArray()));
-        distrito.setSelectedItem(cliente.getDistrito());
+        provincias.setText(model.getProvincia().getNombre());
+        canton.setModel(new DefaultComboBoxModel(model.getProvincia().getCanton().toArray()));
+        canton.setSelectedItem(model.getCanton());
+        distrito.setModel(new DefaultComboBoxModel(model.getCanton().getDistrito().toArray()));
+        distrito.setSelectedItem(model.getDistrito());
         
-        mapaProvincias(cliente);
+        mapaProvincias();
     }
     //************** END MVC ***********
     
@@ -1228,6 +1228,7 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
     private void guanacasteLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guanacasteLabelMouseClicked
        provincias.setText("Guanacaste");
        
+       
        //canton.setModel(new DefaultComboBoxModel(model.getProvincia().getCanton().toArray()));
     }//GEN-LAST:event_guanacasteLabelMouseClicked
 
@@ -1390,36 +1391,36 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
     private javax.swing.JLabel sanJoseLabel5;
     // End of variables declaration//GEN-END:variables
 
-    public void mapaProvincias(Cliente cli){
-        if("Alajuela".equals(cli.getProvincia())){
+    public void mapaProvincias(){
+        if("Alajuela".equals(model.getProvincia().getNombre())){
             fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Alajuela.jpeg")));
         }
         else{
-            if("Guanacaste".equals(cli.getProvincia().getNombre())){
+            if("Guanacaste".equals(model.getProvincia().getNombre())){
                 fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Guanacaste.jpeg")));
             }
             else{
-                if("Heredia".equals(cli.getProvincia().getNombre())){
+                if("Heredia".equals(model.getProvincia().getNombre())){
                    fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Heredia.jpeg")));
                 }
                 else{
-                    if("San José".equals(cli.getProvincia().getNombre())){
+                    if("San José".equals(model.getProvincia().getNombre())){
                         fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/SanJose.jpeg")));
                     }
                     else{
-                         if("Cartago".equals(cli.getProvincia().getNombre())){
+                         if("Cartago".equals(model.getProvincia().getNombre())){
                              fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Cartago.jpeg")));
                          }
                          else{
-                              if("Puntarenas".equals(cli.getProvincia().getNombre())){
+                              if("Puntarenas".equals(model.getProvincia().getNombre())){
                                   fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Puntarenas.jpeg")));
                               }
                               else{
-                                   if("Limón".equals(cli.getProvincia().getNombre())){
+                                   if("Limón".equals(model.getProvincia().getNombre())){
                                        fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/Limon.jpeg")));
                                    }
                                    else{
-                                       if(cli.getProvincia().getNombre().isEmpty()){
+                                       if(model.getProvincia().getNombre().isEmpty()){
                                            fondoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagen/MapaBlanco.jpeg")));
                                        }
                                    }

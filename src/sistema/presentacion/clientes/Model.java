@@ -15,6 +15,7 @@ public class Model extends Observable{
     Cliente cliente;
     Provincia provincia;
     Canton canton;
+    Distrito distrito;
     List<Cliente> clientes;
     List<Provincia> provincias;
     List<Canton> cantones;
@@ -69,6 +70,20 @@ public class Model extends Observable{
     public void setDistritos(List<Distrito> distritos) {
         this.distritos = distritos;
     }
+
+    public Distrito getDistrito() {
+        return distrito;
+    }
+
+    public void setCanton(Canton canton) {
+        this.canton = canton;
+    }
+
+    public void setDistrito(Distrito distrito) {
+        this.distrito = distrito;
+    }
+    
+    
      
     @Override
     public synchronized void addObserver(Observer o) {
