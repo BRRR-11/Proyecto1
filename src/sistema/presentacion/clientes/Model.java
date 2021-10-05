@@ -36,11 +36,7 @@ public class Model extends Observable{
         distritos = new ArrayList();
  
     }
-
-    
-    
-    
-    
+   
     public Cliente getCliente() {
         return cliente;
     }
