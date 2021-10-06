@@ -43,6 +43,15 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
         return model;
     }
     
+    public String getCedula(){
+        return cedula.getText();
+    }
+    
+    public Cliente getCliente()
+    {
+      return model.getCliente();
+    }
+    
     @Override
     public void update(Observable o, Object arg) {
         
@@ -212,6 +221,7 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
         cedLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         cedLabel.setText("Cédula");
 
+<<<<<<< Updated upstream
         cedula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cedulaActionPerformed(evt);
@@ -219,6 +229,9 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
         });
 
         consultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/lupauscar.png"))); // NOI18N
+=======
+        consultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Lupa.jpg"))); // NOI18N
+>>>>>>> Stashed changes
         consultar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         consultar.setBorderPainted(false);
         consultar.setContentAreaFilled(false);
@@ -235,11 +248,6 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
         provinciaLabel.setText("Provincias");
 
         provincias.setToolTipText("");
-        provincias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                provinciasActionPerformed(evt);
-            }
-        });
 
         cantonLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         cantonLabel.setText("Canton");
@@ -368,7 +376,12 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
 
     private void prestamoBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prestamoBotonActionPerformed
         // TODO add your handling code here:
-        controller.showPrestamoCliente();
+        
+        //sistema.presentacion.prestamo.View viewPrestamo = new sistema.presentacion.prestamo.View();
+       // viewPrestamo.cedText.setText(this.getCedula());
+       // viewPrestamo.setVisible(true);
+        controller.showPrestamoCliente(this.getCedula());
+        //controller.showPrestamoCliente();
     }//GEN-LAST:event_prestamoBotonActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
@@ -396,7 +409,7 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
     private void cantonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cantonActionPerformed
         Canton c = (Canton)canton.getSelectedItem();
         controller.cargarDistritos(c);
-        canton.setSelectedItem(c);
+       canton.setSelectedItem(c);
     }//GEN-LAST:event_cantonActionPerformed
 
     //**********************************************************************************************************
@@ -409,14 +422,6 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
         // TODO add your handling code here:
         controller.guardarDatos();
     }//GEN-LAST:event_formWindowClosing
-
-    private void provinciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_provinciasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_provinciasActionPerformed
-
-    private void cedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cedulaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cedulaActionPerformed
 
     
     /**
