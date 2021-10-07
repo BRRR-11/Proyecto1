@@ -59,6 +59,7 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
      */
     public Mapa() {
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/hongo.png")).getImage());
         int a = 100;
         button6=new JButton();
         button5=new JButton();
