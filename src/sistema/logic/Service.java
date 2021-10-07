@@ -76,18 +76,18 @@ public class Service {
     public Prestamo prestamoGet(int numero) throws Exception{
         Prestamo result=data.getPrestamos().stream().filter(f->f.getNumero()==(numero)).findFirst().orElse(null);
         if (result!=null) return result;
-        else throw new Exception("Factura no existe");   
+        else throw new Exception("Prestamo no existe");   
     }
     
-   /* public List<Prestamo> prestamoSearch(int numero){
-        List<Prestamo> result=data.getPrestamos().stream().filter(f->f.getNumero().startsWith(numero)).collect(Collectors.toList());
+   public List<Prestamo> prestamoSearch(String numero){
+        List<Prestamo> result=data.getPrestamos().stream().filter(f->f.getCliente().getCedula().startsWith(numero)).collect(Collectors.toList());
         return result;        
-    }*/
+    }
     
     public void prestamoAdd(Prestamo prestamo) throws Exception{
         Prestamo old=data.getPrestamos().stream().filter(f->f.getNumero()==(prestamo.getNumero())).findFirst().orElse(null);
         if (old==null) data.getPrestamos().add(prestamo);
-        else throw new Exception("Factura ya existe");           
+        else throw new Exception("Prestamo ya existe");           
         
     } 
     
@@ -106,7 +106,14 @@ public class Service {
           }
            return old;
         }
-          else throw new Exception("Pelicula no existe");
+          else throw new Exception("Prestamo no existe");
+    }
+    //------------------------------------------------------------------------------------------------------------------------
+    public List<Mensualidad> mensualidad(int numero){
+        Prestamo result=data.getPrestamos().stream().filter(f->f.getNumero()==(numero)).findFirst().orElse(null);
+        if(result != null) return result.getMensualidades();
+        else return null;
+       //else throw new Exception("Prestamo no existe");
     }
     
      //------------------------------------------------------------------------------------------------------------------------

@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 public class AbonarTableModel extends AbstractTableModel implements TableModel{
-    String[] cols ={"Mensualidad","Saldo","Interés","Amortización" };
+    String[] cols ={"Mensualidad","Saldo","Interes","Amortizacion" };
     List<Mensualidad> rows;
 
     public  AbonarTableModel(List<Mensualidad> rows){
@@ -36,12 +36,12 @@ public class AbonarTableModel extends AbstractTableModel implements TableModel{
     
     public Object getValueAt(int row, int col) {
         Mensualidad m = rows.get(row);
-        java.text.DecimalFormat df = new java.text.DecimalFormat("####");
+        //java.text.DecimalFormat df = new java.text.DecimalFormat("####");
         switch (col){
-            case 0: return df.format(m.getNumero());
-            case 1: return df.format(m.getSaldo());
-            case 2: return df.format(m.getInteres());
-            case 3: return df.format(m.getAmortizacion());
+            case 0: return (m.getNumero());
+            case 1: return (m.getSaldo());
+            case 2: return (m.getInteres());
+            case 3: return (m.getAmortizacion());
             default: return "";
         }
     }    

@@ -39,10 +39,10 @@ public class Aplicacion {
         sistema.presentacion.abonar.Controller controllerAbonar = new sistema.presentacion.abonar.Controller(modelAbonar,viewAbonar);
         ABONAR = controllerAbonar;
         
-        sistema.presentacion.prestamoCliente.Model modelPrestamoCliente=new sistema.presentacion.prestamoCliente.Model() ;
+       /* sistema.presentacion.prestamoCliente.Model modelPrestamoCliente=new sistema.presentacion.prestamoCliente.Model() ;
         sistema.presentacion.prestamoCliente.View viewPrestamoCliente= new sistema.presentacion.prestamoCliente.View();
         sistema.presentacion.prestamoCliente.Controller controllerPrestamoCliente = new sistema.presentacion.prestamoCliente.Controller(modelPrestamoCliente,viewPrestamoCliente);
-        PRESTAMOCLIENTE = controllerPrestamoCliente;
+        PRESTAMOCLIENTE = controllerPrestamoCliente;*/
         
        
         
@@ -51,7 +51,7 @@ public class Aplicacion {
         
     }
     
-    public static sistema.presentacion.prestamoCliente.Controller PRESTAMOCLIENTE;
+    //public static sistema.presentacion.prestamoCliente.Controller PRESTAMOCLIENTE;
     public static sistema.presentacion.clientes.Controller CLIENTES;
     public static sistema.presentacion.prestamo.Controller  PRESTAMO;
     public static sistema.presentacion.abonar.Controller  ABONAR;

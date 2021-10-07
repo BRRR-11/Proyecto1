@@ -3,6 +3,9 @@ package sistema.presentacion.prestamo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sistema.logic.Cliente;
 import sistema.principal.Aplicacion;
 import sistema.logic.Prestamo;
 import sistema.logic.Service;
@@ -30,12 +33,45 @@ public class Controller {
     
     public void hide(){
         this.view.setVisible(false);
-        Aplicacion.PRESTAMOCLIENTE.show();
-    }    
-    
+        Aplicacion.CLIENTES.show();
+        //Aplicacion.PRESTAMOCLIENTE.show();
+    }
+    public void abonarShow(String ced, String nom, String ID){
+        this.hide();
+        Aplicacion.ABONAR.show();
+        Aplicacion.ABONAR.setearCed(ced);
+        Aplicacion.ABONAR.setearNombre(nom);
+        Aplicacion.ABONAR.setearID(ID);
+    }
+
+    public void setearCed(String ced){
+            this.view.cedText.setText(ced);
+    }
+    public void setearNombre(String ced){
+        this.view.nombreText.setText(getCliente(ced).getNombre());
+    }
+    public Cliente getCliente(String ced)
+    {
+        Cliente cliente;
+        try {
+            cliente = Service.instance().clienteGet(ced);
+            //this.view.nombreText.setText(cliente.getNombre()); //cliente
+            return cliente; 
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null;
+    }
     // Controller methods that respond to View events
     // probably invoke methods from Service,
     // and set data to Model, which in turn causes the View to update 
+    public void prestamoListar(String id)
+    {
+        List<Prestamo> prestamo = Service.instance().prestamoSearch(id);
+        model.setPrestamo(new Prestamo(0,0,0,"","","", this.getCliente(id)));
+        model.setPrestamos(prestamo);
+        model.commit();
+    }
     
     public void prestamoGet(int numero){
         try {

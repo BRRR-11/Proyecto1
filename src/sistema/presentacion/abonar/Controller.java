@@ -3,6 +3,7 @@ package sistema.presentacion.abonar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import sistema.logic.Mensualidad;
 import sistema.principal.Aplicacion;
 import sistema.logic.Prestamo;
 import sistema.logic.Service;
@@ -30,9 +31,17 @@ public class Controller {
     
     public void hide(){
         this.view.setVisible(false);
-        //Aplicacion.PRINCIPAL.show();
+        Aplicacion.PRESTAMO.show();
     }    
-    
+    public void setearCed(String ced){
+        this.view.textCedula.setText(ced);
+    }
+    public void setearNombre(String nom){
+        this.view.textNombre.setText(nom);
+    }
+    public void setearID(String ID){
+        this.view.textNumPrestamo.setText(ID);
+    }
     // Controller methods that respond to View events
     // probably invoke methods from Service,
     // and set data to Model, which in turn causes the View to update 
@@ -56,7 +65,13 @@ public class Controller {
         model.setPrestamos(prestamos);
         model.commit();
     }*/
-    
+    public void mensualidadList(int num){
+            List<Mensualidad> mensu = Service.instance().mensualidad(num);
+            model.setMensualidad(new Mensualidad(0,0,0,0));
+            model.setMensualidades(mensu);
+            model.commit();
+     
+    }
     public void prestamoEdit(int row){
         Prestamo prestamo = model.getPrestamos().get(row);
         model.setPrestamo(prestamo);

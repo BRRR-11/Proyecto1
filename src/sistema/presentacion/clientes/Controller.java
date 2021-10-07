@@ -25,10 +25,14 @@ public class Controller {
         this.view.setVisible(true);
     }
     
-    public void showPrestamoCliente()
+    public void showPrestamoCliente(String cli)
     {
       this.hide();
-      Aplicacion.PRESTAMOCLIENTE.show();
+      Aplicacion.PRESTAMO.show();
+      //sistema.presentacion.prestamo.View.cedText.setText(ced);
+      //Aplicacion.PRESTAMO.setearCed(ced);
+      Aplicacion.PRESTAMO.setearCed(cli);
+      Aplicacion.PRESTAMO.setearNombre(cli);
     }
     
     /*

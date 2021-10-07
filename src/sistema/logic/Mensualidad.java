@@ -7,10 +7,10 @@ public class Mensualidad extends Prestamo{
 	double amortizacion;
 
 	public Mensualidad (int n, double s,double i,double a){
-                numero = n;
-		saldo = s;            
-		interes = i;
-		amortizacion = a;
+            numero = n;
+            saldo = s;            
+            interes = i;
+            amortizacion = a;
 	}
 
         public int getNum() {
