@@ -68,7 +68,6 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
      */
     public Mapa() {
         initComponents();
-        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/hongo.png")).getImage());
         int a = 100;
         button6=new JButton();
         button5=new JButton();
@@ -222,15 +221,6 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
         cedLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         cedLabel.setText("Cedula");
 
-<<<<<<< HEAD
-=======
-        cedula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cedulaActionPerformed(evt);
-            }
-        });
-
->>>>>>> parent of c476350 (imagenes)
         consultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Lupa.jpg"))); // NOI18N
         consultar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         consultar.addActionListener(new java.awt.event.ActionListener() {
