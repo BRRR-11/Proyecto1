@@ -93,4 +93,14 @@ public class Controller {
     void guardarDatos() {
         model.guardarDatos();
     }
+    
+    
+    //////////////  PARTE PDF  //////////////    
+    
+    private void clientesPDF(){
+        
+        
+    }
+    
+    
 }
