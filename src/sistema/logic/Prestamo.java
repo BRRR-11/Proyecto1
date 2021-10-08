@@ -10,7 +10,8 @@ import javax.xml.bind.annotation.XmlIDREF;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Prestamo {
         //int num = 0;
-        int numero;
+        static int generador =3;
+        //int numero;
         double monto;
 	double tasa;
 	double plazo;
@@ -21,8 +22,9 @@ public class Prestamo {
         Cliente cliente;
        // Random rand = new Random();
        // int contador=0;
+        int numero;
 	public Prestamo(double m, double t, double p,String d, String me, String an, Cliente cli){
-            numero = 1; 
+            numero = generador++; 
             monto=m;
             tasa=t;
             plazo=p;

@@ -32,7 +32,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         this.model=model;
         model.addObserver(this);
     }
-
+    
     public Model getModel() {
         return model;
     }
@@ -49,7 +49,11 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
        annioText.setText(prestamo.getAnnio());
        montoText.setText(String.valueOf(prestamo.getMonto()));
        plazoText.setText(String.valueOf(prestamo.getPlazo()));
+       prestamoTable.clearSelection();
        prestamoTable.setModel(new MensualidadTableModel(model.getPrestamos()));
+      // prestamoTable.;
+       //prestamoTable.setModel(new MensualidadTableModel(model.getPrestamos()));
+       
     }
     //************** END MVC ***********
     public View() {
@@ -263,15 +267,18 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
 
     private void regresarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarBotonActionPerformed
         controller.hide();
+       
     }//GEN-LAST:event_regresarBotonActionPerformed
 
     private void listarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listarBotonActionPerformed
         controller.prestamoListar(cedText.getText());
+        
     }//GEN-LAST:event_listarBotonActionPerformed
 
     private void agregarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarBotonActionPerformed
        double d=Double.parseDouble(montoText.getText()); 
        double p=Double.parseDouble(plazoText.getText());
+       controller.setearCed(cedText.getText());
        controller.prestamoAdd(new Prestamo (d,2,p,diaText.getText(),mesText.getText(),annioText.getText(),controller.getCliente(cedText.getText())));
     }//GEN-LAST:event_agregarBotonActionPerformed
 

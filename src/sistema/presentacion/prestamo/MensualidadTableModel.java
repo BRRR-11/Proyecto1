@@ -21,7 +21,12 @@ public class MensualidadTableModel extends AbstractTableModel implements TableMo
     public String getColumnName(int col){
         return cols[col];
     }
-
+    public void clearTable(){
+    for(int i=0;i< this.getRowCount(); i++ )
+        {
+            this.rows.remove(i);
+        }
+    }
     public int getRowCount() {
         return rows.size();
     }

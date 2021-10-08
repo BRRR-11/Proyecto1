@@ -46,6 +46,7 @@ public class Controller {
 
     public void setearCed(String ced){
             this.view.cedText.setText(ced);
+            //prestamoTable.clearSelection();
     }
     public void setearNombre(String ced){
         this.view.nombreText.setText(getCliente(ced).getNombre());
