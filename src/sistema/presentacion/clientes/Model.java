@@ -1,5 +1,7 @@
 package sistema.presentacion.clientes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +9,12 @@ import sistema.logic.Provincia;
 import sistema.logic.Cliente;
 import java.util.Observable;
 import java.util.Observer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import sistema.logic.Canton;
 import sistema.logic.Distrito;
 import sistema.logic.Service;
@@ -19,10 +27,11 @@ public class Model extends Observable{
     Provincia provincia;
     Canton canton;
     Distrito distrito;
-    //List<Cliente> clientes;
+    List<Cliente> clientes;
     List<Provincia> provincias;
     List<Canton> cantones;
     List<Distrito> distritos;
+   
 
     public Model() {
         
@@ -49,14 +58,14 @@ public class Model extends Observable{
         this.cliente = cliente;
     }
 
-   /* public List<Cliente> getClientes() {
+    public List<Cliente> getClientes() {
         return clientes;
     }
 
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-*/
+
     public Provincia getProvincia() {
         return provincia;
     }
@@ -145,4 +154,95 @@ public class Model extends Observable{
     void guardarDatos() {
         Service.instance().store();
     }
+    
+    
+    //////////////  PARTE PDF  //////////////    
+    
+    public void clientesPDF() throws IOException{
+        try(PDDocument document= new PDDocument()){
+            File archivo = new File("ListadoClientes.pdf");
+            if(archivo.exists()){
+                archivo.delete();
+            }
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            document.addPage(page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, false);
+            for (int i = 0, ii = 10; this.getClientes().size() >= i; i++, ii += 10) {
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN), 10);
+                contentStream.newLineAtOffset(5, page.getMediaBox().getHeight() - ii);
+                contentStream.showText(i + this.getClientes().get(i).toString());
+                contentStream.endText();
+            }
+        }
+    }
+    
+    
+    public void prestamosClientesPDF(){
+        String id = cliente.getCedula();
+        //int id = Integer.parseInt(map.TextoID.getText());
+        try (PDDocument document = new PDDocument()) {
+            File archivo = new File("ListadoPrestamosPC" + id + ".pdf");
+            if (archivo.exists()) {
+                archivo.delete();
+            }
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            document.addPage(page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, false);
+            for (int i = 0; i < this.getClientes().size(); i++) {
+                if (id == this.getClientes().get(i).getCedula()) {
+                    /*
+                    for (int j = 0, ii = 10; j < this.getClientes().get(i).getPrestamosCliente().getPrestamos().size(); j++, ii += 10) {
+                        contentStream.beginText();
+                        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN), 10);
+                        contentStream.newLineAtOffset(5, page.getMediaBox().getHeight() - ii);
+                        contentStream.showText(j + this.getClientes().get(i).getPrestamosCliente().getPrestamos().get(j).toString());
+                        contentStream.endText();
+                    }*/
+                }
+            }
+            contentStream.close();
+            document.save(new File("ListadoPrestamosPC" + id + ".pdf"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    private void pagosPrestamos() {
+        int id = 0;
+       // Integer id = (Integer) ventanaPrestamo.numerosPrestamos.getSelectedItem();
+        try (PDDocument document = new PDDocument()) {
+            File archivo = new File("ListadoPagos" + id + ".pdf");
+            if (archivo.exists()) {
+                archivo.delete();
+            }
+            PDPage page = new PDPage(PDRectangle.LETTER);
+            document.addPage(page);
+            PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, false);
+            /*
+            for (int i = 0; i < this.getClientes().size(); i++) {
+                for (int j = 0; j < this.getClientes().get(i).getPrestamosCliente().getPrestamos().size(); j++) {
+                    if (id == this.getClientes().get(i).getPrestamosCliente().getPrestamos().get(j).getNumeroPrestamo()) {
+                        for (int k = 0, ii = 10;k < this.getClientes().get(i).getPrestamosCliente().getPrestamos().get(j).getPagos().getPagos().size(); k++, ii += 10 ) {
+                            contentStream.beginText();
+                            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN), 10);
+                            contentStream.newLineAtOffset(5, page.getMediaBox().getHeight() - ii);
+                            contentStream.showText(j + this.getClientes().get(i).getPrestamosCliente().getPrestamos().get(j).getPagos().getPagos().get(k).toString());
+                            contentStream.endText();
+                        }
+                    }
+                }
+            }
+            */
+            contentStream.close();
+            document.save(new File("ListadoPagos" + id + ".pdf"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    
 }

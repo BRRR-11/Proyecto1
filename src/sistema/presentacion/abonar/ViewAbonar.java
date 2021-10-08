@@ -83,6 +83,7 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
         jLabel6 = new javax.swing.JLabel();
         textNumPrestamo = new javax.swing.JTextField();
         listarBoton = new javax.swing.JButton();
+        listaPresPDF = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -138,6 +139,13 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
             }
         });
 
+        listaPresPDF.setText("Reporte PDF");
+        listaPresPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listaPresPDFActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,7 +177,9 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
                                     .addComponent(textMontoAbonar)
                                     .addComponent(textNumPrestamo))
                                 .addGap(134, 134, 134)
-                                .addComponent(listarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(listarBoton, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                                    .addComponent(listaPresPDF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
@@ -197,10 +207,15 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
                     .addGroup(layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(listarBoton)))
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(textMontoAbonar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(textMontoAbonar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(listaPresPDF)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -230,6 +245,10 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
     private void listarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listarBotonActionPerformed
         controller.mensualidadList(Integer.parseInt(textNumPrestamo.getText()));
     }//GEN-LAST:event_listarBotonActionPerformed
+
+    private void listaPresPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaPresPDFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listaPresPDFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,6 +296,7 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton listaPresPDF;
     private javax.swing.JButton listarBoton;
     private javax.swing.JTextField textAmortizacion;
     public javax.swing.JTextField textCedula;

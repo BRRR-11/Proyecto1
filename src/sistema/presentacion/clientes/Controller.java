@@ -1,11 +1,10 @@
 package sistema.presentacion.clientes;
 
+
+import java.io.IOException;
 import sistema.logic.Cliente;
-import sistema.logic.Provincia;
-import sistema.logic.Service;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import sistema.logic.Canton;
 import sistema.principal.Aplicacion;
 
@@ -35,7 +34,7 @@ public class Controller {
       Aplicacion.PRESTAMO.setearNombre(cli);
     }
     
-    /*
+    
     public void buscar(String provincia) 
     {
         try{
@@ -46,7 +45,8 @@ public class Controller {
             model.setCantones(new ArrayList<>());
             model.commit();
         }
-    }*/
+    }
+    
     public void consultar(String cedula){
          try {
              model.consultar(cedula);
@@ -94,13 +94,12 @@ public class Controller {
         model.guardarDatos();
     }
     
-    
-    //////////////  PARTE PDF  //////////////    
-    
-    private void clientesPDF(){
-        
-        
+    public void generarPDFclientes() throws IOException{
+        model.clientesPDF();
     }
     
+    
+    
+ 
     
 }

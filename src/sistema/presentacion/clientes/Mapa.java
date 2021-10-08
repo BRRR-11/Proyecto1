@@ -120,7 +120,7 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
             @Override
             public void mouseEntered(MouseEvent e) {
                 boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                System.out.println("entro!");
+                //System.out.println("entro!");
                 try {
                     boton.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(imaSelec))));
                     boton.repaint();
@@ -132,7 +132,7 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
             public void mouseExited(MouseEvent e) {
                 
                 if(!provincias.getText().equals(nombreProvi)){
-                     System.out.println("salio!");
+                     //System.out.println("salio!");
                 try {
                    
                     boton.setIcon(new ImageIcon(ImageIO.read(getClass().getResource(imaNoSelec))));
