@@ -49,10 +49,8 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
        annioText.setText(prestamo.getAnnio());
        montoText.setText(String.valueOf(prestamo.getMonto()));
        plazoText.setText(String.valueOf(prestamo.getPlazo()));
-       prestamoTable.clearSelection();
        prestamoTable.setModel(new MensualidadTableModel(model.getPrestamos()));
-      // prestamoTable.;
-       //prestamoTable.setModel(new MensualidadTableModel(model.getPrestamos()));
+     
        
     }
     //************** END MVC ***********
@@ -156,6 +154,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         jLabel2.setText("Tasa:");
 
         jTextField1.setText("2%");
+        jTextField1.setEnabled(false);
 
         nombreLabel.setText("Nombre:");
 
@@ -276,10 +275,10 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     }//GEN-LAST:event_listarBotonActionPerformed
 
     private void agregarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarBotonActionPerformed
-       double d=Double.parseDouble(montoText.getText()); 
-       double p=Double.parseDouble(plazoText.getText());
-       controller.setearCed(cedText.getText());
-       controller.prestamoAdd(new Prestamo (d,2,p,diaText.getText(),mesText.getText(),annioText.getText(),controller.getCliente(cedText.getText())));
+       //double d=Double.parseDouble(montoText.getText()); 
+       //double p=Double.parseDouble(plazoText.getText());
+       //controller.setearCed(cedText.getText());
+       controller.prestamoAdd(new Prestamo (Double.parseDouble(montoText.getText()),Double.parseDouble(montoText.getText()),2,Double.parseDouble(plazoText.getText()),diaText.getText(),mesText.getText(),annioText.getText(),controller.getCliente(cedText.getText())));
     }//GEN-LAST:event_agregarBotonActionPerformed
 
     private void abonarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abonarBotonActionPerformed
@@ -290,6 +289,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
         if(evt.getClickCount()==2){
             controller.prestamoEdit(prestamoTable.getSelectedRow());
             controller.abonarShow(cedText.getText(),nombreText.getText(), String.valueOf(model.getPrestamo().getNumero()));
+            
         }
     }//GEN-LAST:event_prestamoTableMouseClicked
 

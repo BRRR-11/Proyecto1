@@ -7,6 +7,7 @@ package sistema.presentacion.abonar;
 import java.util.Observable;
 import javax.swing.DefaultComboBoxModel;
 import java.io.IOException;
+import sistema.logic.Mensualidad;
 import sistema.logic.Prestamo;
 
 /**
@@ -42,9 +43,12 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
        textNumPrestamo.setText(String.valueOf(prestamo.getNumero()));
        textCedula.setText(prestamo.getCliente().getCedula());
        textNombre.setText(prestamo.getCliente().getNombre());
-       //textMontoPagar.setText (String.valueOf(prestamo.getCuota()));
-       //textAmortizacion.setText(prestamo.getMensualidades().toString());
-       abonarTable.setModel(new AbonarTableModel(model.getPrestamo().getMensualidades()) );
+       textMontoPagar.setText(String.valueOf(prestamo.getCuota()));
+       textInteres.setText(String.valueOf(prestamo.calculaInteres()));
+       textAmortizacion.setText(String.valueOf(prestamo.calculaAmortizacion()));
+       textMontoActual.setText(String.valueOf(prestamo.getMontoActual()));
+       abonarTable.setModel(new AbonarTableModel(model.getPrestamo().getMensualidades()));//Buscar Prestamo ID, llamar mensualidad de ese prestamo
+      
     }
     //************** END MVC ***********
     
@@ -84,6 +88,11 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
         textNumPrestamo = new javax.swing.JTextField();
         listarBoton = new javax.swing.JButton();
         listaPresPDF = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        textInteres = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        textMontoActual = new javax.swing.JTextField();
+        textNumMensualidad = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -111,6 +120,10 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Amortizacion");
+
+        textMontoPagar.setEnabled(false);
+
+        textAmortizacion.setEnabled(false);
 
         buttonAbonar.setText("Abonar");
         buttonAbonar.addActionListener(new java.awt.event.ActionListener() {
@@ -146,6 +159,16 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel7.setText("Interes");
+
+        textInteres.setEnabled(false);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setText("Monto Actual");
+
+        textMontoActual.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,7 +190,9 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(textNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
@@ -175,19 +200,25 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
                                     .addComponent(textMontoPagar)
                                     .addComponent(textAmortizacion)
                                     .addComponent(textMontoAbonar)
-                                    .addComponent(textNumPrestamo))
+                                    .addComponent(textNumPrestamo)
+                                    .addComponent(textInteres)
+                                    .addComponent(textMontoActual))
                                 .addGap(134, 134, 134)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(listarBoton, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
                                     .addComponent(listaPresPDF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(textNumMensualidad, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(textNumMensualidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(textNumPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -209,18 +240,28 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
                         .addComponent(listarBoton)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
+                        .addGap(20, 20, 20)
+                        .addComponent(listaPresPDF))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(textInteres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(textMontoAbonar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(listaPresPDF)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                            .addComponent(textMontoAbonar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(textAmortizacion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel4))
+                    .addComponent(textAmortizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(textMontoActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -233,8 +274,10 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAbonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAbonarActionPerformed
-        // TODO add your handling code here:
-        controller.verificar(textMontoAbonar.getText(),Integer.parseInt(textNumPrestamo.getText()));
+      System.out.print("Guardando Abono");
+      //controller.verificar(textMontoAbonar.getText(),Integer.parseInt(textNumPrestamo.getText()),new Mensualidad (Double.parseDouble(textMontoActual.getText()),Double.parseDouble(textInteres.getText()),Double.parseDouble(textAmortizacion.getText())));
+        controller.mensualidadAdd(new Mensualidad (Double.parseDouble(textMontoActual.getText()),Double.parseDouble(textInteres.getText()),Double.parseDouble(textAmortizacion.getText())),Integer.parseInt(textNumPrestamo.getText()) );
+        System.out.print("Guardado Abono");
     }//GEN-LAST:event_buttonAbonarActionPerformed
 
     private void ButtonRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRegresarActionPerformed
@@ -243,7 +286,9 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
     }//GEN-LAST:event_ButtonRegresarActionPerformed
 
     private void listarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listarBotonActionPerformed
+        System.out.print("Listando");
         controller.mensualidadList(Integer.parseInt(textNumPrestamo.getText()));
+        System.out.print("Listado");
     }//GEN-LAST:event_listarBotonActionPerformed
 
     private void listaPresPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaPresPDFActionPerformed
@@ -295,14 +340,19 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton listaPresPDF;
     private javax.swing.JButton listarBoton;
-    private javax.swing.JTextField textAmortizacion;
+    public javax.swing.JTextField textAmortizacion;
     public javax.swing.JTextField textCedula;
-    private javax.swing.JTextField textMontoAbonar;
-    private javax.swing.JTextField textMontoPagar;
+    public javax.swing.JTextField textInteres;
+    public javax.swing.JTextField textMontoAbonar;
+    public javax.swing.JTextField textMontoActual;
+    public javax.swing.JTextField textMontoPagar;
     public javax.swing.JTextField textNombre;
+    private javax.swing.JTextField textNumMensualidad;
     public javax.swing.JTextField textNumPrestamo;
     // End of variables declaration//GEN-END:variables
 }

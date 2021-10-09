@@ -19,7 +19,7 @@ public class Controller {
         this.view = view;
         // invoke Model sets for initialization before linking to the view
         // problably get the data from Service
-        model.setPrestamo(new Prestamo(0,2,0,"","",""));
+        model.setPrestamo(new Prestamo(0,0,2,0,"","",""));
         model.setPrestamos(new ArrayList<>());
         model.setClientes(Service.instance().clienteAll());
         
@@ -42,6 +42,10 @@ public class Controller {
         Aplicacion.ABONAR.setearCed(ced);
         Aplicacion.ABONAR.setearNombre(nom);
         Aplicacion.ABONAR.setearID(ID);
+        Aplicacion.ABONAR.setearCuota();
+        Aplicacion.ABONAR.setearAmortizacion();
+        Aplicacion.ABONAR.setearInterez();
+        Aplicacion.ABONAR.setearMontoActual();
     }
 
     public void setearCed(String ced){
@@ -69,7 +73,7 @@ public class Controller {
     public void prestamoListar(String id)
     {
         List<Prestamo> prestamo = Service.instance().prestamoSearch(id);
-        model.setPrestamo(new Prestamo(0,0,0,"","","", this.getCliente(id)));
+        model.setPrestamo(new Prestamo(0,0,0,0,"","","", this.getCliente(id)));
         model.setPrestamos(prestamo);
         model.commit();
     }
@@ -103,7 +107,7 @@ public class Controller {
     public void prestamoAdd(Prestamo prestamo){
         try {
             Service.instance().prestamoAdd(prestamo);
-            model.setPrestamo(new Prestamo(0,2,0,"","",""));
+            model.setPrestamo(new Prestamo(0,0,2,0,"","",""));
             model.setPrestamos(Arrays.asList(prestamo));
             model.commit();
         } catch (Exception ex) {
@@ -117,7 +121,7 @@ public class Controller {
         try{
            Prestamo prestamo = Service.instance().verificarCuota(abono, numero);
            double ab=Double.parseDouble(abono);
-            model.setPrestamo(new Prestamo(ab,2,0,"","",""));
+            model.setPrestamo(new Prestamo(0,ab,2,0,"","",""));
             model.setPrestamos(Arrays.asList(prestamo));
         }catch(Exception ex){
         }

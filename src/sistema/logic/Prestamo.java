@@ -7,12 +7,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlIDREF;
 
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Prestamo {
         //int num = 0;
-        static int generador =3;
+        static int generador = 1;
         //int numero;
         double monto;
+        double montoActual;
 	double tasa;
 	double plazo;
         String dia;
@@ -20,33 +22,60 @@ public class Prestamo {
         String annio;
         @XmlIDREF
         Cliente cliente;
+        List<Mensualidad> mensualidad;
        // Random rand = new Random();
        // int contador=0;
         int numero;
-	public Prestamo(double m, double t, double p,String d, String me, String an, Cliente cli){
+	public Prestamo(double m,double mA, double t, double p,String d, String me, String an, Cliente cli, List<Mensualidad> mensualidades){
             numero = generador++; 
             monto=m;
+            montoActual =mA;
             tasa=t;
             plazo=p;
             dia = d;
             mes = me;
             annio = an;
             cliente = cli;
+            mensualidad = mensualidades;
 	}
-        public Prestamo(double m, double t, double p, String d, String me, String an){
+        public Prestamo(double m,double mA, double t, double p, String d, String me, String an){
             numero = 0;
             monto=m;
+            montoActual = mA;
             tasa=t;
             plazo=p;
             dia = d;
             mes = me;
             annio = an;
             cliente = new Cliente("","","","","");
+            mensualidad = new ArrayList<>();
         }
-
+        public Prestamo(double m,double mA, double t, double p,String d, String me, String an, Cliente cli)
+        {
+            numero = generador++; 
+            monto=m;
+            montoActual =mA;
+            tasa=t;
+            plazo=p;
+            dia = d;
+            mes = me;
+            annio = an;
+            cliente = cli;
+            mensualidad = new ArrayList<>();
+        }
 	public Prestamo(){
 	}
-
+        
+        public double getMontoActual()
+        {
+            return montoActual;
+        }
+        
+        public void setMontoActual(double mA)
+        {
+            this.montoActual = mA;
+        }
+        
         public int getNumero() {
             return numero;
         }
@@ -106,9 +135,14 @@ public class Prestamo {
 
 	public double getCuota(){
 		double cuota;
-		cuota   = monto * tasa/100 /(1-Math.pow(1+tasa/100,-plazo));
+		cuota   = (montoActual * tasa/100 )/(1-Math.pow(1+tasa/100,-plazo));
 		return cuota;
 	}
+        
+        public double calculoMontoActual(double abono)
+        {
+           return montoActual = montoActual - abono;
+        }
 
 	public double getTotal(){
 		double total;
@@ -123,25 +157,48 @@ public class Prestamo {
         public void setCliente(Cliente cliente) {
             this.cliente = cliente;
         }
-        
+        public double calculaInteres(){
+            return monto * tasa/100;
+        }
+        public double calculaAmortizacion(){
+            return (this.getCuota() - this.calculaInteres());
+        }
+        public double calculaDiferenciaSaldo(int i){
+            return this.getTotal()- this.getCuota() * i;
+        }
 
-	public List<Mensualidad> getMensualidades(){
+	/*public List<Mensualidad> getMensualidades(){//Devolver mensualidad
             Mensualidad m;
-            double cuota=this.getCuota();
+            /*double cuota=this.getCuota();
             double saldo=monto;
             double interes=0;
             double amortizacion=0;
             ArrayList<Mensualidad> resultado = new ArrayList<>();
 
 	    for(int i=0;i<plazo;i++){
-	    	 interes = saldo * tasa/100;
+	    	 /*interes = saldo * tasa/100;
 	    	 amortizacion = cuota - interes;
-                 m = new Mensualidad(i+1,saldo,interes, amortizacion);
+                 m = new Mensualidad(montoActual,this.calculaInteres(),this.calculaAmortizacion());
                  resultado.add(m);
-                 saldo = saldo - amortizacion;                 
+                 //saldo = saldo - amortizacion;                
             }
             return resultado;
-	}
+	}*/
+        public List<Mensualidad> getMensualidades(){
+            
+                return mensualidad;
+            
+        }
+        
+        public void setMensualidades( List<Mensualidad> mensualidades)
+        {
+            mensualidad = mensualidades;
+        }
+        
+        public void agregarMensualidad(Mensualidad mensualidad)
+        {
+            this.mensualidad.add(mensualidad);
+        }
 
     @Override
     public String toString() {

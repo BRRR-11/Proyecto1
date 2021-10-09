@@ -73,7 +73,7 @@ public class Service {
   
     
     //------------------------------------------------------------------------------------------------------------------------
-    public Prestamo prestamoGet(int numero) throws Exception{
+    public Prestamo prestamoGet(int numero) throws Exception{//Usar en en controller para usar en el View
         Prestamo result=data.getPrestamos().stream().filter(f->f.getNumero()==(numero)).findFirst().orElse(null);
         if (result!=null) return result;
         else throw new Exception("Prestamo no existe");   
@@ -89,7 +89,13 @@ public class Service {
         if (old==null) data.getPrestamos().add(prestamo);
         else throw new Exception("Prestamo ya existe");           
         
-    } 
+    }
+    public void mensualidadAdd(Mensualidad mensualidad)throws Exception
+    {
+           Mensualidad old=data.getMensualidades().stream().filter(f->f.getNumero()==(mensualidad.getNumero())).findFirst().orElse(null);
+           if(old==null) data.getMensualidades().add(mensualidad);
+             else throw new Exception("Mensualidad ya existe");  
+    }
     
     public Prestamo verificarCuota(String abono, int numero)throws Exception
     {
