@@ -22,8 +22,8 @@ public class Controller {
         // invoke Model sets for initialization before linking to the view
         // problably get the data from Service
         model.setPrestamo(new Prestamo(0,0,2,0,"","",""));
-        model.setPrestamos(new ArrayList<>());
-        model.setClientes(Service.instance().clienteAll());
+        //model.setPrestamos(new ArrayList<>());
+        //model.setClientes(Service.instance().clienteAll());
         
         view.setModel(model);
         view.setController(this);
@@ -83,7 +83,7 @@ public class Controller {
   public void setearAmortizacion()
   {
         try {
-            this.view.textAmortizacion.setText(String.valueOf(Math.round(Service.instance().prestamoGet( Integer.valueOf(this.view.textNumPrestamo.getText())).calculaAmortizacion())));
+            this.view.textAmortizacion.setText(String.valueOf(Math.round(Service.instance().prestamoGet(Integer.valueOf(this.view.textNumPrestamo.getText())).calculaAmortizacion())));
         } catch (Exception ex) {
             //Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,11 +93,11 @@ public class Controller {
         try {
             Prestamo prestamo = Service.instance().prestamoGet(numero);
             model.setPrestamo(prestamo);
-            model.setPrestamos(Arrays.asList(prestamo));
+            //model.setPrestamos(Arrays.asList(prestamo));
             model.commit();
         } catch (Exception ex) {
             model.setPrestamo(new Prestamo());
-            model.setPrestamos(new ArrayList<>());
+            //model.setPrestamos(new ArrayList<>());
             model.commit();
         }
     }
@@ -116,8 +116,8 @@ public class Controller {
      
     }
     public void prestamoEdit(int row){
-        Prestamo prestamo = model.getPrestamos().get(row);
-        model.setPrestamo(prestamo);
+        //Prestamo prestamo = model.getPrestamos().get(row);
+        //model.setPrestamo(prestamo);
         model.commit();
     }
     
@@ -125,7 +125,7 @@ public class Controller {
         try {
             Service.instance().prestamoAdd(prestamo);
             model.setPrestamo(new Prestamo(0,0,2,0,"","",""));
-            model.setPrestamos(Arrays.asList(prestamo));
+            //model.setPrestamos(Arrays.asList(prestamo));
             model.commit();
         } catch (Exception ex) {
             
@@ -139,7 +139,7 @@ public class Controller {
            double ab=Double.parseDouble(abono);
             Service.instance().mensualidadAdd(mensualidad);
             model.setPrestamo(new Prestamo(0,ab,2,0,"","",""));
-            model.setPrestamos(Arrays.asList(prestamo));
+            //model.setPrestamos(Arrays.asList(prestamo));
             model.setMensualidad(new Mensualidad(0,0,0));
             model.setMensualidades(Arrays.asList(mensualidad));
             model.commit();
@@ -156,7 +156,9 @@ public class Controller {
            // model.setPrestamo(prestamo.calculoMontoActual(Double.parseDouble(this.view.textMontoAbonar.getText())));
             //model.prestamo.calculoMontoActual(Double.parseDouble(this.view.textMontoAbonar.getText()));
            model.setPrestamo(new Prestamo(0,prestamo.calculoMontoActual(Double.parseDouble(this.view.textMontoAbonar.getText())),2,0,"","",""));
-           
+           model.setMensualidad(new Mensualidad(0,0,0));
+           model.getPrestamo().setMensualidades(Arrays.asList(mensualidad));
+           model.commit();
         } catch (Exception ex) {
             //Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }

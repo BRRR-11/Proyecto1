@@ -288,6 +288,7 @@ public class View extends javax.swing.JFrame implements java.util.Observer{
     private void prestamoTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prestamoTableMouseClicked
         if(evt.getClickCount()==2){
             controller.prestamoEdit(prestamoTable.getSelectedRow());
+            
             controller.abonarShow(cedText.getText(),nombreText.getText(), String.valueOf(model.getPrestamo().getNumero()));
             
         }

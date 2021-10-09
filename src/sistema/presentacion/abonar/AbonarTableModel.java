@@ -9,6 +9,7 @@ import sistema.logic.Mensualidad;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
+import sistema.logic.Prestamo;
 
 public class AbonarTableModel extends AbstractTableModel implements TableModel{
     String[] cols ={"Mensualidad","Saldo","Interes","Amortizacion" };
@@ -44,5 +45,21 @@ public class AbonarTableModel extends AbstractTableModel implements TableModel{
             case 3: return (m.getAmortizacion());
             default: return "";
         }
-    }    
+    } 
+
+    /*public MensualidadTableModel(Prestamo prestamo){
+        
+        mensualidades = prestamo.getListaMensualidades();
+        
+        matris = new String[this.mensualidades.size()][nombres.length];
+        
+        for(int i = 0; i < this.mensualidades.size(); i++){
+            
+            matris[i][0] = this.mensualidades.get(i).getNumero();
+            matris[i][1] = this.mensualidades.get(i).getSaldoActual();
+            matris[i][2] = this.mensualidades.get(i).getInteres();
+            matris[i][3] = this.mensualidades.get(i).getAmortizacion();
+            
+        }       
+    }*/
 }

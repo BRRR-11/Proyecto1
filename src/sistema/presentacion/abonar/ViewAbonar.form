@@ -58,7 +58,7 @@
                               </Group>
                               <EmptySpace min="-2" pref="134" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="listarBoton" pref="113" max="32767" attributes="0"/>
+                                  <Component id="listarBoton" max="32767" attributes="0"/>
                                   <Component id="listaPresPDF" max="32767" attributes="0"/>
                               </Group>
                           </Group>

@@ -10,8 +10,8 @@ import sistema.logic.Prestamo;
 public class Model extends Observable{
     Prestamo prestamo;
     Mensualidad mensualidad;
-    List<Prestamo> prestamos;
-    List<Cliente> clientes;
+   // List<Prestamo> prestamos;
+   // List<Cliente> clientes;
     List<Mensualidad> mensualidades;
 
     public Prestamo getPrestamo() {
@@ -22,7 +22,7 @@ public class Model extends Observable{
         this.prestamo = prestamo;
     }
 
-    public List<Prestamo> getPrestamos() {
+   /* public List<Prestamo> getPrestamos() {
         return prestamos;
     }
 
@@ -36,7 +36,7 @@ public class Model extends Observable{
 
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
-    }
+    }*/
 //--------------------------------------------------------------------------------------
     public Mensualidad getMensualidad() {
         return mensualidad;
@@ -52,6 +52,7 @@ public class Model extends Observable{
     }
 
     public void setMensualidades(List<Mensualidad> mensualidades) {
+        System.out.print("SetMensualidades  "); 
         this.mensualidades = mensualidades;
     }
         

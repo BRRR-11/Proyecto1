@@ -197,7 +197,13 @@ public class Prestamo {
         
         public void agregarMensualidad(Mensualidad mensualidad)
         {
-            this.mensualidad.add(mensualidad);
+            if(this.mensualidad == null){
+                this.mensualidad = new ArrayList<>();
+                this.mensualidad.add(mensualidad);
+            }
+            else{
+                this.mensualidad.add(mensualidad);
+            }
         }
 
     @Override
