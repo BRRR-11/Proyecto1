@@ -108,11 +108,17 @@ public class Controller {
         model.setPrestamos(prestamos);
         model.commit();
     }*/
-    public void mensualidadList(int num){
-            List<Mensualidad> mensu = Service.instance().mensualidad(num);
+    public void mensualidadList(int num) {
+            //List<Mensualidad> mensu;
+        try {
+            List<Mensualidad> mensu;
+            mensu = Service.instance().prestamoGet(num).getMensualidades();
             model.setMensualidad(new Mensualidad(0,0,0));
-            model.setMensualidades(mensu);
+            model.getPrestamo().setMensualidades(mensu);
             model.commit();
+        } catch (Exception ex) {
+            //Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
      
     }
     public void prestamoEdit(int row){
