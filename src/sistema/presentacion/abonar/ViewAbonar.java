@@ -9,7 +9,34 @@ import javax.swing.DefaultComboBoxModel;
 import java.io.IOException;
 import sistema.logic.Mensualidad;
 import sistema.logic.Prestamo;
-
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
+import java.io.*;
+import com.sun.glass.events.KeyEvent;
+import java.awt.Rectangle;
+import sistema.logic.Service;
+//import java.io.IOException;
+/*import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.TIMES_ROMAN;
+*/
 /**
  *
  * @author Admin
@@ -295,8 +322,16 @@ public class ViewAbonar extends javax.swing.JFrame implements java.util.Observer
     }                                           
 
     private void listaPresPDFActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // TODO add your handling code here:
-    }                                            
+      
+        /* try {
+            // TODO add your handling code here:
+            createPdf3(DEST);
+        } catch (IOException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+    } 
+  
 
     /**
      * @param args the command line arguments

@@ -1,5 +1,21 @@
 package sistema.presentacion.clientes;
 
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -16,6 +32,7 @@ import javax.swing.JButton;
 import sistema.logic.Canton;
 import sistema.logic.Distrito;
 import sistema.logic.Provincia;
+import sistema.logic.Service;
 
 /**
  *
@@ -181,10 +198,61 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
             
         } catch (IOException ex) {
             Logger.getLogger(Mapa.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+      public static void createPdf3(String dest) throws IOException {
+        PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+        PdfWriter writer = new PdfWriter(dest);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf, PageSize.A4.rotate());
+        document.setMargins(20, 20, 20, 20);
+
+        ImageData data = ImageDataFactory.create("logo.png");
+        Image img = new Image(data);
+        document.add(img);
+
+        document.add(new Paragraph(""));
+        document.add(new Paragraph("Financiera DAROVA CR").setFont(font).setBold().setFontSize(20f));
+        document.add(new Paragraph(""));
+        document.add(new Paragraph("Reporte de Clientes").setFont(font).setBold().setFontSize(20f));
+
+        Table table = new Table(5);
+        Cell c;
+        Color bkg = ColorConstants.BLUE;
+        Color frg = ColorConstants.WHITE;
+        c = new Cell();
+        c.add(new Paragraph("Nombre")).setBackgroundColor(bkg).setFontColor(frg);
+        table.addHeaderCell(c);
+        c = new Cell();
+        c.add(new Paragraph("Cédula")).setBackgroundColor(bkg).setFontColor(frg);
+        table.addHeaderCell(c);
+        c = new Cell();
+        c.add(new Paragraph("Provincia")).setBackgroundColor(bkg).setFontColor(frg);
+        table.addHeaderCell(c);
+        c = new Cell();
+        c.add(new Paragraph("Cantón")).setBackgroundColor(bkg).setFontColor(frg);
+        table.addHeaderCell(c);
+        c = new Cell();
+        c.add(new Paragraph("Distrito")).setBackgroundColor(bkg).setFontColor(frg);
+        table.addHeaderCell(c);
+
+        for (int i = 0; i < Service.instance().clienteAll().size(); i++) {
+
+            table.addCell(Service.instance().clienteAll().get(i).getNombre());
+            table.addCell(Service.instance().clienteAll().get(i).getCedula());
+            table.addCell(Service.instance().clienteAll().get(i).getProvincia());
+            table.addCell(Service.instance().clienteAll().get(i).getCanton());
+            table.addCell(Service.instance().clienteAll().get(i).getDistrito());
+
         }
-        
-        
-        
+        c = new Cell(1, 4);
+        c.add(new Paragraph(" ")).setBackgroundColor(bkg).setFontColor(frg).setTextAlignment(TextAlignment.RIGHT);
+        table.addHeaderCell(c);
+        c = new Cell();
+        c.add(new Paragraph(" ")).setBackgroundColor(bkg).setFontColor(frg);
+        table.addHeaderCell(c);
+        document.add(table);
+        document.close();
     }
 
     /**
@@ -349,13 +417,13 @@ public class Mapa extends javax.swing.JFrame implements java.util.Observer {
     }// </editor-fold>//GEN-END:initComponents
 
     private void prestamoBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prestamoBotonActionPerformed
-        // TODO add your handling code here:
-        
-        //sistema.presentacion.prestamo.View viewPrestamo = new sistema.presentacion.prestamo.View();
-       // viewPrestamo.cedText.setText(this.getCedula());
-       // viewPrestamo.setVisible(true);
         controller.showPrestamoCliente(this.getCedula());
-        //controller.showPrestamoCliente();
+        /*try {
+            // TODO add your handling code here:
+            createPdf3(DEST);
+        } catch (IOException x) {
+           // Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }//GEN-LAST:event_prestamoBotonActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
