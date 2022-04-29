@@ -11,7 +11,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 public class XmlPersister {
-     private String path;
+    private String path;
     private static XmlPersister theInstance;
     public static XmlPersister instance(){
         if (theInstance==null){ 
